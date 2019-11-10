@@ -1,138 +1,146 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row bg-title">
-    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-      <h4 class="page-title">Manage Tasks</h4> </div>
-      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-        <!-- <a href="https://wrappixel.com/templates/ampleadmin/" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Upgrade to Pro 2</a> -->       
-        <ol class="breadcrumb">
 
-            <li><a href="{{url('home')}}">Dashboard</a></li>
-            <li class="active">Manage Tasks</li>
-        </ol>
+<!-- ============================================================== -->
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="page-breadcrumb">
+        <div class="row">
+            <div class="col-12 d-flex no-block align-items-center">
+                <h4 class="page-title">View Tasks</h4>
+
+                <div class="ml-auto text-right">
+                <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{url('home')}}">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Tasks</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.col-lg-12 -->
-</div>
-<!-- /.row -->
-<!-- ============================================================== -->
-<!-- Different data widgets -->
-<!-- ============================================================== -->
-<!-- .row -->
-<div class="row">
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title"></h5>
+            <div class="table-responsive">
 
-    <div class="col-lg-6 col-sm-6 col-xs-12">
-        <div class="white-box analytics-info">
-            <h3 class="box-title text-info"> DUE TODAY </h3>
-            <table class="table table-sm table-hover">
+            <table id="zero_config" class="table table-striped table-hover table-bordered">
+                <!-- $alltasks -->
+
                 <thead>
-                    <th>JO#</th>
-                    <th>Client</th>
-                    <th>Task Name</th>
-                    <th>Date Due</th>
-                    <th>State</th>
+                    <tr>
+                        <th>JO#</th>
+                        <th>Client Name</th>
+                        <th>Task Name</th>
+                        <th>Date Due</th>
+                        <th>Status</th>
+                        <th>Assigned To</th>
+                        <th>Days Left</th>
+                    </tr>
                 </thead>
                 <tbody>
-                    @if(count($duetasks) > 0)
-                    @foreach($duetasks as $dtask)
+                @if(count($alltasks) > 0)
+                    @foreach($alltasks as $task)
                     <tr>
-                        <td>{{$dtask->joid}}</td>
-                        <td>{{$dtask->clientname}}</td>
-                        <td>{{$dtask->taskname}}</td>
-                        <td>{{$dtask->datedue}}</td>
-                        <td>{{$dtask->state}}</td>
+                        <td>{{$task->joid}}</td>
+                        <td>{{$task->clientname}}</td>
+                        <td>{{$task->taskname}}</td>
+                        <td>{{$task->datedue}}</td>
+                        <td>{{$task->state}}</td>
+                        <td>{{$task->assigned}}</td>
+                        
+                        <?php
+                        $date1=date_create(date("Y-m-d"));
+                        $date2=date_create($task->datedue);
+                        $diff=date_diff($date1,$date2);
+                        $rdate = $diff->format("%R%a");
+
+                        if((int)$rdate === 0){
+                            //due today
+                            echo '<td><span class="badge badge-primary">due today</span></td>';
+                        }else if($rdate > 0){
+                            //incoming due
+                            echo '<td>'. $rdate . ' days<span class="badge badge-warning">incoming due</span></td>';
+                        }else{
+                            //past due
+                            echo '<td>'. $rdate . ' days<span class="badge badge-danger">past due </span> </td>';
+                        }
+                        ?>
+
                     </tr>
                     @endforeach
-                    @endif
+                @endif
                 </tbody>
+                <!-- <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Office</th>
+                        <th>Age</th>
+                        <th>Start date</th>
+                        <th>Salary</th>
+                    </tr>
+                </tfoot> -->
             </table>
-        </div>
-    </div>
-    <div class="col-lg-6 col-sm-6 col-xs-12">
-        <div class="white-box analytics-info">
-            <h3 class="box-title text-danger"> PAST DUE </h3>
-            <table class="table table-sm table-hover">
-                        <thead>
-                          <th>JO#</th>
-                          <th>Client</th>
-                          <th>Task Name</th>
-                          <th>Date Due</th>
-                          <th>State</th>
-                        </thead>
-                        <tbody>
-                          @if(count($tasks) > 0)
-                          @foreach($pduetasks as $ptask)
-                            <tr>
-                              <td>{{$ptask->joid}}</td>
-                              <td>{{$ptask->clientname}}</td>
-                              <td>{{$ptask->taskname}}</td>
-                              <td>{{$ptask->datedue}}</td>
-                              <td>{{$ptask->state}}</td>
-                            </tr>
-                          @endforeach
-                          @endif
-                        </tbody>
-                    </table>
-        </div>
-    </div>
-    <div class="col-lg-6 col-sm-6 col-xs-12">
-        <div class="white-box analytics-info">
-            <h3 class="box-title text-warning"> INCOMING DUE </h3>
-            <table class="table table-sm table-hover">
-                        <thead>
-                          <th>JO#</th>
-                          <th>Client</th>
-                          <th>Task Name</th>
-                          <th>Date Due</th>
-                          <th>State</th>
-                        </thead>
-                        <tbody>
-                          @if(count($intasks) > 0)
-                          @foreach($intasks as $itask)
-                            <tr>
-                              <td>{{$itask->joid}}</td>
-                              <td>{{$itask->clientname}}</td>
-                              <td>{{$itask->taskname}}</td>
-                              <td>{{$itask->datedue}}</td>
-                              <td>{{$itask->state}}</td>
-                            </tr>
-                          @endforeach
-                          @endif
-                        </tbody>
-                    </table>
-        </div>
-    </div>
-    <div class="col-lg-6 col-sm-6 col-xs-12">
-        <div class="white-box analytics-info">
-            <h3 class="box-title text-success"> DONE </h3>
-            @if(count($tasks) > 0)
-                    <table class="table table-sm table-hover">
-                        <thead>
-                          <th>JO#</th>
-                          <th>Client</th>
-                          <th>Task Name</th>
-                          <th>Date Due</th>
-                          <th>State</th>
-                        </thead>
-                        <tbody>
-                          @foreach($tasks as $task)
-                          @if($task->tsid <= 7)
-                            <tr>
-                              <td>{{$task->joid}}</td>
-                              <td>{{$task->clientname}}</td>
-                              <td>{{$task->taskname}}</td>
-                              <td>{{$task->datedue}}</td>
-                              <td>{{$task->state}}</td>
-                            </tr>
-                          @endif
-                          @endforeach
-                        </tbody>
-                    </table>
-                    {{ $tasks->links() }}
-                    @endif
-        </div>
-    </div>
 
-</div>
-<!--/.row -->
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Right sidebar -->
+    <!-- ============================================================== -->
+    <!-- .right-sidebar -->
+    <!-- ============================================================== -->
+    <!-- End Right sidebar -->
+    <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Container fluid  -->
+    <!-- ============================================================== -->
+
+
+
+
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="../../assets/libs/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="../../assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../../assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="../../assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
+    <script src="../../assets/extra-libs/sparkline/sparkline.js"></script>
+    <!--Wave Effects -->
+    <script src="../../dist/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="../../dist/js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="../../dist/js/custom.min.js"></script>
+    <!-- this page js -->
+    <script src="../../assets/extra-libs/multicheck/datatable-checkbox-init.js"></script>
+    <script src="../../assets/extra-libs/multicheck/jquery.multicheck.js"></script>
+    <script src="../../assets/extra-libs/DataTables/datatables.min.js"></script>
+    <script>
+        /****************************************
+         *       Basic Table                   *
+         ****************************************/
+        $('#zero_config').DataTable();
+    </script>
+
 @endsection

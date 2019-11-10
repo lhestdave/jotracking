@@ -25,8 +25,14 @@
                             <th>{{implode(', ', $user->roles()->get()->pluck('name')->toArray())}}</th>
                             <th>
                               <a href="{{route('superadmin.users.edit',$user->id)}}">
-                                <button type="button" name="button" class="btn btn-primary btn-sm">Edit</button>
+                                <button type="button" name="button" class="btn btn-primary btn-sm">
+                                <i class="fas fa-pencil-alt" aria-hidden="true"></i>Edit</button>
                               </a>
+                              <a href="{{url('jo/user')}}/{{$user->id}}">
+                                <button type="button" name="button" class="btn btn-primary btn-sm"> 
+                                  <i class="fas fa-tasks" aria-hidden="true"></i>&nbsp;JO</button>
+                              </a>
+
                             </th>
                           </tr>
                       @endforeach

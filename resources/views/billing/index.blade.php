@@ -1,59 +1,63 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row bg-title">
-    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-      <h4 class="page-title">Manage Billing</h4> </div>
-      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-        <!-- <a href="https://wrappixel.com/templates/ampleadmin/" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Upgrade to Pro 2</a> -->       
-        <ol class="breadcrumb">
-<!-- 
-            <li> 
 
-            
-            <form class="form-inline my-2 my-lg-0" action="{{url('/billing/search')}}" method="post">
-              
-                {{ csrf_field() }}
-                <input class="form-control mr-sm-2" type="search" name="josearchkey" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-              </form>
-            </li> -->
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-12 d-flex no-block align-items-center">
+                            <h4 class="page-title">Manage Billings</h4>
 
-            <li><a href="{{url('home')}}">Dashboard</a></li>
-            <li class="active">Manage Job Orders</li>
-        </ol>
-    </div>
-    <!-- /.col-lg-12 -->
-</div>
-<!-- /.row -->
-<!-- ============================================================== -->
-<!-- Different data widgets -->
-<!-- ============================================================== -->
-<!-- .row -->
-<div class="row">
-@if(session('successb'))
-  <div class="alert alert-success alert-dismissible">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Success! </strong>{{session('successb')}}
-  </div>
-  @endif
-  @if(count($errors) > 0)
-  <div class="alert alert-danger alert-dismissible">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Error!</strong>
-    {{$errors->first('ornumber')}}<br>
-    {{$errors->first('paymentdate')}}<br>
-    {{$errors->first('amount')}}<br>
-  </div>
-  @endif
-  <div class="col-sm-12">
-        <div class="white-box analytics-info">
-            <!-- <h3 class="box-title">List of Job Orders</h3> -->
-            <table class="table table-sm table-hover table-striped">
+                            <div class="ml-auto text-right">
+                            <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="{{url('home')}}">Home</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Billings</li>
+                                    </ol>
+                                </nav>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Container fluid  -->
+                <!-- ============================================================== -->
+                <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                @if(session('successb'))
+                <div class="alert alert-success alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Success! </strong>{{session('successb')}}
+                </div>
+                @endif
+                @if(count($errors) > 0)
+                <div class="alert alert-danger alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Error!</strong>
+                    {{$errors->first('ornumber')}}<br>
+                    {{$errors->first('paymentdate')}}<br>
+                    {{$errors->first('amount')}}<br>
+                </div>
+                @endif
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"></h5>
+                        <div class="table-responsive">
+                        <table class="table table-sm table-hover table-striped">
                     <thead>
                       <tr>
                         <th scope="col">JO#</th>
                         <th scope="col">Company/Client Name</th>
+                        <th scope="col">Date Created</th>
                         <th scope="col">Amount Due</th>
                         <th scope="col">Amount Paid</th>
                         <th scope="col">OR Number</th>
@@ -67,6 +71,7 @@
                          <tr id="tr">
                            <td>{{$bill->id}}</td>
                            <td>{{$bill->clientname}}</td>
+                           <td align="right">{{$bill->created_at}}</td>
                            <td align="right">{{number_format($bill->amount, 2, '.', ',')}}</td>
                            <td align="right">{{number_format($bill->paidamount, 2, '.', ',')}}</td>
                            <td>{{$bill->ornumber}}</td>
@@ -76,7 +81,7 @@
                            @if(($bill->amount - $bill->paidamount) == 0)
 
                            @else
-                           <button class="btn btn-success" onClick="addpayment('{{$bill->id}}','{{ ($bill->amount - $bill->paidamount) }}')" data-toggle="modal" data-target="#paymentModal" rel="tooltip" title="Add Payment" type="button"><span class="fa fa-money"></span></button>
+                           <button class="btn btn-success" onClick="addpayment('{{$bill->id}}','{{ ($bill->amount - $bill->paidamount) }}')" data-toggle="modal" data-target="#paymentModal" rel="tooltip" title="Add Payment" type="button"><span class="fa fa-credit-card"></span></button>
                            @endif
                            <a href="{{url('billing/jid')}}/{{$bill->id}}" target="_blank">
                            <button class="btn btn-info" onClick="" data-toggle="modal" data-target="" rel="tooltip" title="View Transaction" type="button"><span class="fa fa-print"></span></button>
@@ -93,12 +98,11 @@
                   </table>
                   {{ $billings->links() }}
 
+                        </div>
+                    </div>
+                </div>
 
-
-      </div>
-    </div>
-</div>
-<!--/.row -->
+                
 
 <!-- Modal -->
 <div class="modal fade" id="paymentModal" tabindex="" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
@@ -153,6 +157,23 @@
   </div>
 </div>
 <!-- End Modal -->
+
+
+                    <!-- ============================================================== -->
+                    <!-- End PAge Content -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- Right sidebar -->
+                    <!-- ============================================================== -->
+                    <!-- .right-sidebar -->
+                    <!-- ============================================================== -->
+                    <!-- End Right sidebar -->
+                    <!-- ============================================================== -->
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Container fluid  -->
+                <!-- ============================================================== -->
+
 @endsection
 <script type="text/javascript">
 function form_submit() {

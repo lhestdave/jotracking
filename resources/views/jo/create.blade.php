@@ -1,31 +1,53 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row bg-title">
-    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-      <h4 class="page-title">CREATE JOB ORDER</h4> </div>
-      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-        <!-- <a href="https://wrappixel.com/templates/ampleadmin/" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Upgrade to Pro 2</a> -->       
-        <ol class="breadcrumb">
-            <li><a href="{{url('home')}}">Dashboard</a></li>
-            <li class="active">Create Job Orders</li>
-        </ol>
-    </div>
-    <!-- /.col-lg-12 -->
-</div>
-<!-- /.row -->
-<!-- ============================================================== -->
-<!-- Different data widgets -->
-<!-- ============================================================== -->
-<!-- .row -->
-<div class="row">
-  @if(session('error'))
-  <div class="alert alert-danger alert-dismissible">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>Error! </strong>{{session('error')}}
-  </div>
-  @endif
-  <div class="col-sm-12">
+
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-12 d-flex no-block align-items-center">
+                            <h4 class="page-title">Create New Job Order</h4>
+
+                            <div class="ml-auto text-right">
+                            <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="{{url('home')}}">Home</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Create New JO</li>
+                                    </ol>
+                                </nav>
+                                <!-- <form class="form-inline my-2 my-lg-0" action="{{url('/jo/search')}}" method="post">
+                                <a href="{{url('/jo/create?cid=')}}"> <button class="btn btn-outline-primary my-2 my-sm-0" type="button">New JO</button> </a> &nbsp
+                                  {{ csrf_field() }}
+                                  <input class="form-control mr-sm-2" type="search" name="josearchkey" placeholder="Search" aria-label="Search">
+                                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                </form> -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Container fluid  -->
+                <!-- ============================================================== -->
+                <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                @if(session('error'))
+                <div class="alert alert-danger alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Error! </strong>{{session('error')}}
+                </div>
+                @endif
+
+                <div class="card">
+                    <div class="card-body">
+                    <div class="col-sm-12">
         <div class="white-box analytics-info">
             <form id="joForm" action="{{url('/addjo')}}" method="post" onsubmit="return confirm('Do you really want to submit the form?');">
             {{ csrf_field() }}
@@ -98,11 +120,28 @@
 
             </div>
     </div>
-</div>
-<!--/.row -->
+              </div>
+          </div>
+
+
+   
+        <!-- ============================================================== -->
+        <!-- End PAge Content -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Right sidebar -->
+        <!-- ============================================================== -->
+        <!-- .right-sidebar -->
+        <!-- ============================================================== -->
+        <!-- End Right sidebar -->
+        <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
 
 @endsection
-<script src="{{ asset('js/app.js') }}" defer></script>
+<script src="{{ asset('js/app.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>

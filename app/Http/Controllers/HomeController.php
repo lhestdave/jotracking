@@ -48,8 +48,12 @@ class HomeController extends Controller
           $intasks = DB::table('vwalltasks')->where([['tsid', '<', '6'],['datedue', '>',  date("Y-m-d")]])->get();
           $donetasks = DB::table('vwalltasks')->where('tsid', '>=', '6')->paginate(10);
 
-        return view('task.tasks')->with(['duetasks' => $duetasks, 'pduetasks' => $pduetasks, 'intasks' => $intasks, 'tasks'=>$donetasks]);
-    }
+          $alltasks = DB::table('vwalltasks')->get();
+
+        //return view('task.tasks')->with(['duetasks' => $duetasks, 'pduetasks' => $pduetasks, 'intasks' => $intasks, 'tasks'=>$donetasks]);
+        return view('task.tasks')->with(['alltasks' => $alltasks]);
+
+      }
     public function getMyTasks(Request $request)
     {
           $duetasks = DB::table('vwalltasks')->where([['tsid', '<', '6'],['datedue', '=',  date("Y-m-d")],['assignedto', '=', Auth::user()->id]])->get();//@if(($task->datedue == date("Y-m-d")) and $task->tsid < 6 )

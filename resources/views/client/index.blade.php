@@ -1,57 +1,66 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row bg-title">
-    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-      <h4 class="page-title">Manage Clients</h4> </div>
-      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-        <!-- <a href="https://wrappixel.com/templates/ampleadmin/" target="_blank" class="btn btn-danger pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light">Upgrade to Pro 2</a> -->       
-        <ol class="breadcrumb">
 
-            <li> 
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="page-breadcrumb">
+                    <div class="row">
+                        <div class="col-12 d-flex no-block align-items-center">
+                            <h4 class="page-title">Manage Clients</h4>
 
-            <form class="form-inline my-2 my-lg-0" action="{{url('clients/search')}}" method="post">
-              @if(count($admin)>0)
-                  <button class="btn btn-outline-primary my-2 my-sm-0" data-toggle="modal" data-target="#newClientModal" type="button" onclick="addNew(1)">New Client</button> &nbsp
-                  @endif
-              {{ csrf_field() }}
-              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="csearchkey">
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-            </li>
+                            <div class="ml-auto text-right">
+                            <!-- <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="{{url('home')}}">Home</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Clients</li>
+                                    </ol>
+                                </nav> -->
+                            <form class="form-inline my-2 my-lg-0" action="{{url('clients/search')}}" method="post">
+                            @if(count($admin)>0)
+                                <button class="btn btn-outline-primary my-2 my-sm-0" data-toggle="modal" data-target="#newClientModal" type="button" onclick="addNew(1)">New Client</button> &nbsp
+                                @endif
+                            {{ csrf_field() }}
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="csearchkey">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                            </form>
 
-            <li><a href="{{url('home')}}">Dashboard</a></li>
-            <li class="active">Manage Clients</li>
-        </ol>
-    </div>
-    <!-- /.col-lg-12 -->
-</div>
-<!-- /.row -->
-<!-- ============================================================== -->
-<!-- Different data widgets -->
-<!-- ============================================================== -->
-<!-- .row -->
-<div class="row">
-  @if(count($errors) > 0)
-    <div class="alert alert-danger alert-dismissible">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <strong>Error!</strong>
-      {{$errors->first('clientname')}}<br>
-      {{$errors->first('contactno')}}<br>
-      {{$errors->first('cperson')}}<br>
-    </div>
-    @endif
-    @if(session('success'))
-    <div class="alert alert-success alert-dismissible">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <strong>Success! </strong>{{session('success')}}
-    </div>
-    @endif
-  <div class="col-sm-12">
-        <div class="white-box analytics-info">
-            <h3 class="box-title">List of Clients</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Container fluid  -->
+                <!-- ============================================================== -->
+                <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                @if(count($errors) > 0)
+                <div class="alert alert-danger alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Error!</strong>
+                {{$errors->first('clientname')}}<br>
+                {{$errors->first('contactno')}}<br>
+                {{$errors->first('cperson')}}<br>
+                </div>
+                @endif
+                @if(session('success'))
+                <div class="alert alert-success alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Success! </strong>{{session('success')}}
+                </div>
+                @endif
 
-            <table class="table table-hover table-responsive">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"></h5>
+                        <div class="table-responsive">
+                    <table class="table table-hover">
                     <thead>
                       <tr>
                         <th scope="col">TIN</th>
@@ -81,12 +90,12 @@
                                @endif
                                <a href="{{url('jo/view/')}}/{{$client->id}}">
                                <button class="btn btn-success" data-toggle="modal" rel="tooltip" title="View JOs" ><i class="fa fa-bars"></i></button>
-                              </a>
+                              </a><br>
                               <a href="{{url('jo/create?cid=')}}{{$client->id}}">
-                              <button class="btn btn-success" data-toggle="modal" rel="tooltip" title="Create JO" ><i class="fa fa-tasks"></i></button>
+                              <button class="btn btn-success mt-2" data-toggle="modal" rel="tooltip" title="Create JO" ><i class="fa fa-tasks"></i></button>
                              </a>
                              <a href="{{url('billing/view')}}/{{$client->id}}">
-                             <button class="btn btn-outline-success" data-toggle="modal" rel="tooltip" title="View Billing" ><i class="fa fa-money"></i></button>
+                             <button class="btn btn-success mt-2" data-toggle="modal" rel="tooltip" title="View Billing" ><i class="fa fa-credit-card"></i></button>
                             </a>
                              </td>
                          </tr>
@@ -100,15 +109,12 @@
                     </tbody>
                   </table>
                   {{ $clients->links() }}
+                        </div>
+                    </div>
+                </div>
 
 
-        </div>
-    </div>
-</div>
-<!--/.row -->
-
-
-<!-- Modal -->
+                <!-- Modal -->
 <div class="modal fade" id="newClientModal" tabindex="-1" role="dialog" aria-labelledby="newClientModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -175,6 +181,79 @@
   </div>
 </div>
 <!-- End Modal -->
+
+
+
+                    <!-- BEGIN MODAL -->
+                    <!-- <div class="modal none-border" id="my-event">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title"><strong>Add Event</strong></h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body"></div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-success save-event waves-effect waves-light">Create event</button>
+                                    <button type="button" class="btn btn-danger delete-event waves-effect waves-light" data-dismiss="modal">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- Modal Add Category -->
+                    <!-- <div class="modal fade none-border" id="add-new-event">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title"><strong>Add</strong> a category</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="control-label">Category Name</label>
+                                                <input class="form-control form-white" placeholder="Enter name" type="text" name="category-name" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="control-label">Choose Category Color</label>
+                                                <select class="form-control form-white" data-placeholder="Choose a color..." name="category-color">
+                                                    <option value="success">Success</option>
+                                                    <option value="danger">Danger</option>
+                                                    <option value="info">Info</option>
+                                                    <option value="primary">Primary</option>
+                                                    <option value="warning">Warning</option>
+                                                    <option value="inverse">Inverse</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger waves-effect waves-light save-category" data-dismiss="modal">Save</button>
+                                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- END MODAL -->
+    
+                    <!-- ============================================================== -->
+                    <!-- End PAge Content -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- Right sidebar -->
+                    <!-- ============================================================== -->
+                    <!-- .right-sidebar -->
+                    <!-- ============================================================== -->
+                    <!-- End Right sidebar -->
+                    <!-- ============================================================== -->
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Container fluid  -->
+                <!-- ============================================================== -->
+
 @endsection
 
 <script type="text/javascript">

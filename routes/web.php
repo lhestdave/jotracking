@@ -35,16 +35,20 @@ Route::namespace('Admin')->prefix('superadmin')->middleware(['auth','auth.supera
 });
 
 Route::get('/jo', 'JOController@index');
+Route::get('/jo/{jostate}', 'JOController@index');
 Route::post('/jo/gettask', 'JOController@getTask');
-Route::get('/jo/gettaskstatus', 'JOController@getTaskStatus');
+Route::post('/jo/gettaskstatus', 'JOController@getTaskStatus');
 Route::post('/jo/gettaskdetails', 'JOController@getTaskDetails');
 Route::post('/jo/addtasktracking','JOController@addtasktracking');
 Route::get('/jo/create', 'JOController@create');
 Route::post('/addjo', 'JOController@addjo');
 Route::get('/jo/view/{cid}', 'JOController@viewjo');
 Route::post('/jo/search', 'JOController@search');
-Route::get('/jo/getusers', 'JOController@getUsers');
+Route::post('/jo/getusers', 'JOController@getUsers');
 Route::post('/jo/transfer', 'JOController@transfer');
+Route::post('/jo/addjonotes', 'JOController@addJoNotes');
+Route::post('/jo/getjonotes', 'JOController@getJoNotes');
+Route::get('/jo/user/{id}', 'JOController@getJOperUser');
 
 Route::get('/clients', 'ClientController@index');
 Route::post('/addnewclient', 'ClientController@store');

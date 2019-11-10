@@ -22,18 +22,123 @@ class JOController extends Controller
   }
   public function index(Request $request)
   {
+    $filter = $request->jostate;
     //$user->hasAnyRole($role->name)
-     if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
-      $jos = DB::table('vwjosdetails')->paginate(15);
+    if(strcmp($filter,"done") === 0){ //ok 
+        if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
+          $jos = DB::table('vwjosdetails')->where('s','done')->paginate(15);
+          $admin = [];
+          $admin['admin'] = 'admin';
+          return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+        }else{
+          $admin = [];
+          $jos = DB::table('vwjosdetails')->where(['assignedto'=>Auth::user()->id,'s'=>'done'])->paginate(15);
+          return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+        }
+    }else if(strcmp($filter,"current") === 0){
+        if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
+            $jos = DB::table('vwjosdetails')->where([['datedue','>=',date("Y-m-d")], [DB::raw('sumofstatus'), '>', DB::raw('jcount')], ['s', '<>', 'done']])->paginate(15);
+            $admin = [];
+            $admin['admin'] = 'admin';
+            return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+          }else{
+            $admin = [];
+            $jos = DB::table('vwjosdetails')->where([['assignedto'=>Auth::user()->id],['datedue','>=',date("Y-m-d")], [DB::raw('sumofstatus'), '>', DB::raw('jcount')], ['s', '<>', 'done'] ])->paginate(15);
+            return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+          }
+    }else if(strcmp($filter,"pastdue") === 0){
+        if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
+          $jos = DB::table('vwjosdetails')->where([['datedue','<',date("Y-m-d")], [DB::raw('sumofstatus'), '>', DB::raw('jcount')], ['s', '<>', 'done']])->paginate(15);
+          $admin = [];
+          $admin['admin'] = 'admin';
+          return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+        }else{
+          $admin = [];
+          $jos = DB::table('vwjosdetails')->where([['assignedto'=>Auth::user()->id],['datedue','<',date("Y-m-d")], [DB::raw('sumofstatus'), '>', DB::raw('jcount')], ['s', '<>', 'done']])->paginate(15);
+          return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+        }
+    }else if(strcmp($filter,"p30") === 0){
+        if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
+          $jos = DB::table('vwjosdetails')->where([['days','<=','30'], ['s', '<>', 'done']])->paginate(15);
+          $admin = [];
+          $admin['admin'] = 'admin';
+          return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+        }else{
+          $admin = [];
+          $jos = DB::table('vwjosdetails')->where([['assignedto'=>Auth::user()->id],['days','<','30'], ['s', '<>', 'done']])->paginate(15);
+          return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+        }
+    }else if(strcmp($filter,"p60") === 0){
+      if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
+        $jos = DB::table('vwjosdetails')->where([['days','>','30'], ['days','<=','60'], ['s', '<>', 'done']])->paginate(15);
+        $admin = [];
+        $admin['admin'] = 'admin';
+        return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+      }else{
+        $admin = [];
+        $jos = DB::table('vwjosdetails')->where([['assignedto'=>Auth::user()->id],['days','>','30'], ['days','<=','60'], ['s', '<>', 'done']])->paginate(15);
+        return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+      }
+    }else if(strcmp($filter,"p90") === 0){
+      if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
+        $jos = DB::table('vwjosdetails')->where([['days','>','60'], ['days','<=','89'], ['s', '<>', 'done']])->paginate(15);
+        $admin = [];
+        $admin['admin'] = 'admin';
+        return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+      }else{
+        $admin = [];
+        $jos = DB::table('vwjosdetails')->where([['assignedto'=>Auth::user()->id],['days','>','60'], ['days','<=','89'], ['s', '<>', 'done']])->paginate(15);
+        return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+      }
+    }else if(strcmp($filter,"p90plus") === 0){
+      if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
+        $jos = DB::table('vwjosdetails')->where([['days','>','90'],  ['s', '<>', 'done']])->paginate(15);
+        $admin = [];
+        $admin['admin'] = 'admin';
+        return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+      }else{
+        $admin = [];
+        $jos = DB::table('vwjosdetails')->where([['assignedto'=>Auth::user()->id],['days','>','90'], ['s', '<>', 'done']])->paginate(15);
+        return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+      }
+    }else if(strcmp($filter,"create") === 0){
+      $admin = [];
+      $clients = Client::orderBy('clientname', 'ASC')->get();
+      $users = User::orderBy('name', 'ASC')->get();
+  
+      if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
+         $admin['admin'] = 'admin';
+      }
+  
+      return view('jo.create')->with(['clients'=>$clients,'users'=>$users, 'admin'=>$admin]);
+    }else{
+      if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
+        $jos = DB::table('vwjosdetails')->paginate(15);
+        $admin = [];
+        $admin['admin'] = 'admin';
+        return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+      }else{
+        $admin = [];
+        $jos = DB::table('vwjosdetails')->where(['assignedto'=>Auth::user()->id])->paginate(15);
+        return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+      }
+    }
+
+  }
+
+  public function getJOperUser(Request $request){
+    // if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
+      $jos = DB::table('vwjosdetails')->where(['assignedto'=>$request->id])->paginate(15);
       $admin = [];
       $admin['admin'] = 'admin';
       return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin]);
-    }else{
-      $admin = [];
-      $jos = DB::table('vwjosdetails')->where(['assignedto'=>Auth::user()->id])->paginate(15);
-      return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin]);
-    }
+    // }else{
+    //   $admin = [];
+    //   $jos = DB::table('vwjosdetails')->where([['assignedto'=>Auth::user()->id],['datedue','<',date("Y-m-d")], [DB::raw('sumofstatus'), '>', DB::raw('jcount')], ['s', '<>', 'done']])->paginate(15);
+    //   return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
+    // }
   }
+
   public function create(Request $request)
   {
     $admin = [];
@@ -81,7 +186,7 @@ class JOController extends Controller
         $track->save();
       }
       DB::table('jo_transfer')->insert(['joid'=>$joid,'userid'=>$request->input('assignedto'), 'transferby'=>Auth::user()->id,'created_at'=>now()]);
-      return redirect('/jo')->with('success','JO #'.$joid.' has been added.');
+      return redirect('/jo.p30')->with('success','JO #'.$joid.' has been added.');
     }else{
       return redirect('/jo/create?cid=$request->input("clientid")')->with('error','Tasks for the JO must be defined. ');
     }
@@ -98,7 +203,7 @@ class JOController extends Controller
   }
   public function getTaskDetails(Request $request)
   {
-    $data = DB::table('tasktrackings')->where('tid',$request->tid)->orderBy('created_at','ASC')->get();
+    $data = DB::table('tasktrackings')->where('tid',$request->tid)->orderBy('tsid','ASC')->get();
     return response()->json($data);
   }
   public function addtasktracking(Request $request)
@@ -147,6 +252,7 @@ class JOController extends Controller
     $data = User::all();
     return response()->json($data);
   }
+
   public function transfer(Request $request)
   {
     $joid = $request->input('inpjoid');
@@ -156,4 +262,34 @@ class JOController extends Controller
     return redirect('/jo')->with('success','JO #'.$joid.' has been updated.');;
   }
 
+  public function addJoNotes(Request $request)
+  {
+    DB::table('jo_notes')->insert(
+              [
+              'joid' => $request->joid, 
+              'userid' => Auth::user()->id,
+              'note' => $request->note
+              ]
+            );
+
+    $data = DB::table('users')
+    ->join('jo_notes', 'users.id', '=', 'jo_notes.userid')
+    ->select('users.name', 'jo_notes.*')
+    ->where(['jo_notes.joid'=>$request->joid])
+    ->orderby('jo_notes.datecreated', 'desc')
+    ->get();
+
+    return response()->json($data);
+  }
+  public function getJoNotes(Request $request)
+  {
+    $data = DB::table('users')
+    ->join('jo_notes', 'users.id', '=', 'jo_notes.userid')
+    ->select('users.name', 'jo_notes.*')
+    ->where(['jo_notes.joid'=>$request->joid])
+    ->orderby('jo_notes.datecreated', 'desc')
+    ->get();
+
+    return response()->json($data);
+  }
 }
