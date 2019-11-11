@@ -1,12 +1,3 @@
-<style>
-td.details-control {
-    background: url('assets/images/details_open.png') no-repeat center center;
-    cursor: pointer;
-}
-tr.shown td.details-control {
-    background: url('assets/images/details_close.png') no-repeat center center;
-}
-</style>
 @extends('layouts.app')
 
 @section('content')
@@ -57,12 +48,13 @@ tr.shown td.details-control {
 
                 <thead>
                     <tr>
-                        <th scope="col" >JO#</th>
-                        <th scope="col" >Company/Client Name</th>
-                        <th scope="col" >Date Encoded</th>
-                        <th scope="col" >Due Date &nbsp</th>
-                        <th scope="col" >Assigned to</th>
-                        <th scope="col" width="10%">Action</th>
+                        <th scope="col" width="2%">JO#</th>
+                        <th scope="col" width="25%">Company/Client Name</th>
+                        <th scope="col" width="15%">Due Date</th>
+                        <th scope="col" width="10%">Assigned to</th>
+                        <th scope="col" width="38%">Remarks/Notes</th>
+                        <th scope="col" width="5%">Action</th>
+                        <th scope="col" width="5%">View Task</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,10 +65,7 @@ tr.shown td.details-control {
                     <tr id="tr">
                            <td>{{$jo->id}}</td>
                            <td data-table-header="clients">{{$jo->clientname}}
-
-
                            </td>
-                           <td>{{$jo->created_at}}</td>
                            @if($jo->datedue == date("Y-m-d") && $perx < 100)
                            <td class="bg-white">{{$jo->datedue}}                            <?php if($perx == 100){ ?>
                         <div class="progress" style="height: 10px; margin-bottom:0px">
@@ -120,11 +109,11 @@ tr.shown td.details-control {
                            @endif
 
                            <td>{{$jo->username}}</td>
-                           <td class="details-control">
-                           <!-- <p>
-                             <button class="btn btn-primary btn-xs mb-2" type="button" id="viewtask" data-toggle="collapse" data-target="#collapse{{$jo->id}}" aria-expanded="false" aria-controls="collapse{{$jo->id}}" >
-                             <i class=" fas fa-clipboard-list" aria-hidden="true"></i> View Task
-                             </button>
+                           <td><?php
+                            echo nl2br($jo->jonotes);
+                            ?></td>
+                           <td>
+                           <p>
                              @if(count($admin) > 0 && $perx != 100)
                              <button class="btn btn-secondary btn-xs" type="button" rel="tooltip" title="Transfer assignment" data-toggle="modal" data-target="#transferJOModal"
                                     onclick="getJoidTransfer({{$jo->id}})">
@@ -134,8 +123,9 @@ tr.shown td.details-control {
                              <button class="btn btn-primary btn-xs mt-2" type="button" rel="tooltip" title="Add Notes/Updates"  data-toggle="modal" id="addNotes" data-target="#addNoteJO" onClick="saveNotes({{$jo->id}})" >
                              <i class="far fa-newspaper" aria-hidden="true"></i> Add Notes
                              </button>
-                           </p> -->
+                           </p>
                          </td>
+                         <td class="details-control" data-jo="{{$jo->id}}"></td>
                     </tr>
                     @endforeach
                     @endif
@@ -170,6 +160,111 @@ tr.shown td.details-control {
     <!-- ============================================================== -->
     <!-- End Container fluid  -->
     <!-- ============================================================== -->
+<!-- Modal -->
+<div class="modal fade" id="updateTaskModal" tabindex="-1" role="dialog" aria-labelledby="updateTaskModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Task Status</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" id="joForm" action="{{url('/jo/addtasktracking')}}" method="post">
+          {{ csrf_field() }}
+          <input type="text" name="taskid" id="taskid" value="" hidden>
+          <div class="form-group col-sm-12">
+            <label for="taskstatus">Change status to:</label>
+            <select id="ctaskstatus" name="ctaskstatus" class="form-control" required>
+              <!-- <option selected>Choose....</option> -->
+            </select>
+          </div>
+          <div class="form-group col-sm-12">
+            <label for="tasknotes">Add Notes/Remarks:(e.g. Docs Details)</label>
+            <textarea type="textarea" name="tasknotes" id="tasknotes" rows = "3" col="50" class="form-control" required></textarea>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+        <button type="submit"  onclick="form_submit()" class="btn btn-primary btn-sm">Save changes</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
+<!-- Modal -->
+<div class="modal fade" id="transferJOModal" tabindex="-1" role="dialog" aria-labelledby="transferJOModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Transfer JO assignment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" id="transferForm" action="{{url('/jo/transfer')}}" method="post">
+          {{ csrf_field() }}
+          <input type="text" name="inpjoid" id="inpjoid" value="" hidden>
+          <div class="form-group col-sm-12">
+            <label for="listusers">Transfer to:</label>
+            <select id="listusers" name="listusers" class="form-control" required>
+              <!-- <option selected>Choose....</option> -->
+            </select>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+        <button type="submit"  onclick="form_submit1()" class="btn btn-primary btn-sm">Save changes</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
+<!-- Modal -->
+<div class="modal fade" id="addNoteJO" tabindex="-1" role="dialog" aria-labelledby="addNoteJOLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Notes/Updates</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="form-group col-sm-12 ">
+        <br>
+        <input type="text" id="txtjoid" name="txtjoid" hidden/>
+        <label for="txtnotes">Add Notes/Remarks:(e.g. Docs Details)</label>
+        <textarea type="textarea" name="txtnotes" id="txtnotes" rows = "3" col="50" class="form-control" required></textarea>
+        <button type="button" class="btn btn-info mt-2 float-right" id="btnSave" onCLick="saveNotesToDB()"> Save</button>
+      </div>
+      <div class="form-group col-sm-12 ">
+        <table class="table table-sm" id="tblnotes">
+          <thead>
+            <tr>
+              <th scope="col" >Date</th>
+              <th scope="col">Remarks</th>
+            </tr>
+          </thead>
+          <tbody id="notestable">
+            <!-- <tr>
+              <td>12Date</td>
+              <td>10Remarks</td>
+            </tr> -->
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
 
 
 
@@ -198,31 +293,15 @@ tr.shown td.details-control {
         /****************************************
          *       Basic Table                   *
          ****************************************/
-        // $('#jotable').DataTable();
-        $('#jotable').DataTable( {
-            "lengthMenu": [[10, 50, 100, 250, -1], [10, 50, 100, 250, "All"]]
-        });
-        /* Formatting function for row details - modify as you need */
-        function format ( d ) {
-            // `d` is the original data object for the row
-            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-                '<tr>'+
-                    '<td>Full name:</td>'+
-                    '<td>d.name</td>'+
-                '</tr>'+
-                '<tr>'+
-                    '<td>Extension number:</td>'+
-                    '<td>d.extn</td>'+
-                '</tr>'+
-                '<tr>'+
-                    '<td>Extra info:</td>'+
-                    '<td>And any further details here (images etc)...</td>'+
-                '</tr>'+
-            '</table>';
-        }
-        
+        // var table = $('#jotable').DataTable(
 
-            var table = $('#jotable').DataTable( {
+        // );
+        // var table = $('#jotable1').DataTable( {
+        //     "lengthMenu": [[10, 50, 100, 250, -1], [10, 50, 100, 250, "All"]], 
+        // });
+        var jid = 0;
+
+        var table = $('#jotable').DataTable( {}, {
                 "ajax": "../ajax/data/objects.txt",
                 "columns": [
                     {
@@ -230,21 +309,29 @@ tr.shown td.details-control {
                         "orderable":      false,
                         "data":           null,
                         "defaultContent": ''
-                    },
-                    { "data": "name" },
-                    { "data": "position" },
-                    { "data": "office" },
-                    { "data": "salary" }
+                    }
                 ],
                 "order": [[1, 'asc']]
             } );
+
+        /* Formatting function for row details - modify as you need */
+        function format ( d ) {
+            var thd = '<thead><tr><th></th><th>Task Description</th><th>Lead Time</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>';
+                var tb = '<tbody id="tbody'+jid+'"></tbody>';
+                    return '<table cellpadding="5" cellspacing="0" border="1px" style="padding-right:100px;padding-left:100px;width:100%">'+
+                                thd +
+                                tb + 
+                            '</table>';
+        }
+        
+
+
             
     // Add event listener for opening and closing details
     $('#jotable tbody').on('click', 'td.details-control', function () {
+        jid = parseInt($(this).attr("data-jo"));
         var tr = $(this).closest('tr');
         var row = table.row( tr );
-
-        console.log(row);
  
         if ( row.child.isShown() ) {
             // This row is already open - close it
@@ -256,9 +343,161 @@ tr.shown td.details-control {
             row.child( format(row.data()) ).show();
             tr.addClass('shown');
         }
+
+        $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: 'POST',
+            url: '/jo/gettask',
+            data: {
+                '_token': $('input[name=_token]').val(),
+                'joid':jid,
+            },
+            success: function(data){
+                //console.log(data);
+                var markup = '';
+                $("tr.trtask").remove();
+                
+                for (var i = 0; i < data.length; i++) {
+                    if(data[i].tsid == 7){
+                    markup += '<tr class="trtask"><td >'+(i+1)+'</td><td>'+data[i].taskname+'</td><td >'+data[i].leadtime+'</td><td >'+data[i].amount+'</td><td>['+data[i].name+']:'+data[i].state+'<br>'+data[i].st+'</td><td>'+
+                    '<button class="btn btn-outline-primary my-2 my-sm-0 btn-sm taskstatus" data-toggle="modal" data-target="#updateTaskModal" type="button" onclick="gettaskStatus('+data[i].tid+','+data[i].tsid+')" rel="tooltip" title="Update Status" disabled><span class="fa fa-edit"></span></button> '+
+                    ''+
+                    '</td></tr>';
+                    }else{
+                    markup += '<tr class="trtask"><td >'+(i+1)+'</td><td>'+data[i].taskname+'</td><td >'+data[i].leadtime+'</td><td >'+data[i].amount+'</td><td>['+data[i].name+']:'+data[i].state+'<br>'+data[i].st+'</td><td>'+
+                    '<button class="btn btn-outline-primary my-2 my-sm-0 btn-sm taskstatus" data-toggle="modal" data-target="#updateTaskModal" type="button" onclick="gettaskStatus('+data[i].tid+','+data[i].tsid+')" rel="tooltip" title="Update Status" ><span class="fa fa-edit"></span></button> '+
+                    ''+
+                    '</td></tr>';
+                    }
+                }
+                $("table tbody #tbody"+jid).append(markup);
+
+            },
+            error:function(data)
+            {
+                console.log(data);
+            }
+        });
     } );
 
+    function getJoidTransfer(joid)
+    {
+        $('input#inpjoid').val(joid);
+        $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: 'POST',
+            url: '/jo/getusers',
+            data: {
+                '_token': $('input[name=_token]').val()
+            },
+            success: function(response){
+                //console.log(response);
+                $("#listusers").children('option').remove();
+                for (var i = 0; i < response.length; i++) {
+                    $("#listusers").append('<option value="'+response[i].id+'">'+response[i].name+'['+response[i].email+']</option>');
+                }
+            },
+            error:function(response)
+            {
+                console.log(response);
+            }
+        });
+    }
+    function saveNotes(joid){
+    document.getElementById("txtnotes").value = '';
+    var d = Date(Date.now('01-25-2009')); 
+    var table = document.getElementById("notestable");
+    var row = table.insertRow(0); 
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell2 = row.insertCell(2);
+    document.getElementById('txtjoid').value = joid.toString();
 
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+          type: 'POST',
+          url: '/jo/getjonotes',
+          data: {
+              '_token': $('input[name=_token]').val(),
+              'joid' : joid,
+          },
+          success: function(data){
+              console.log(data);
+              $("table#tblnotes tr").remove();
+              for (var i = 0; i < data.length; i++) {
+                var markup = "<tr><td  width='20%'>" + data[i].datecreated + "</td><td  width='80%'><strong>" + data[i].name +'</strong><br>' + data[i].note + "</td></tr>";
+                $("table#tblnotes").append(markup);
+              }
+
+          },
+          error:function(data)
+          {
+            console.log(data);
+          }
+        });
+
+  }
+  function saveNotesToDB(){
+    var joid = $("#txtjoid").val(); 
+    var note = $("#txtnotes").val(); 
+    var d = Date(Date.now('01-25-2009')); 
+    var table = document.getElementById("notestable");
+    var row = table.insertRow(0); 
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell2 = row.insertCell(2);
+
+    if(note.length <= 2){
+      alert('Please provide notes.');
+    }else{
+        $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+          type: 'POST',
+          url: '/jo/addjonotes',
+          data: {
+              '_token': $('input[name=_token]').val(),
+              'joid' : joid,
+              'note' : note,
+          },
+          success: function(data){
+              //console.log(data);
+              $("table#tblnotes tr").remove();
+              for (var i = 0; i < data.length; i++) {
+                var markup = "<tr><td  width='20%'>" + data[i].datecreated + "</td><td  width='80%'><strong>" + data[i].name +'</strong><br>' + data[i].note + "</td></tr>";
+                $("table#tblnotes").append(markup);
+              }
+
+          },
+          error:function(data)
+          {
+            console.log(data);
+          }
+        });
+    }
+
+  }
+  function form_submit() {
+    document.getElementById("joForm").submit();
+  }
+  function form_submit1() {
+    document.getElementById("transferForm").submit();
+  }
 
     </script>
 

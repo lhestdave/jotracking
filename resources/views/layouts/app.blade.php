@@ -27,6 +27,15 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
+    <style>
+    td.details-control {
+        background: url({{url("assets/images/details_open.png")}} ) no-repeat center center;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url({{url("assets/images/details_close.png")}} ) no-repeat center center;
+    }
+    </style>
 </head>
 
 <body>
@@ -281,8 +290,8 @@
                                 <li class="sidebar-item"><a href="icon-fontawesome.html" class="sidebar-link"><i class="mdi mdi-emoticon-cool"></i><span class="hide-menu"> Pending </span> <span class="badge badge-danger ml-1">100</span> </a></li>
                                 <li class="sidebar-item"><a href="icon-fontawesome.html" class="sidebar-link"><i class="mdi mdi-emoticon-cool"></i><span class="hide-menu"> Done </span> <span class="badge badge-success ml-1">100</span> </a></li>
                             </ul>
-                        </li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{url('billing')}}" aria-expanded="false"><i class="mdi mdi-pencil"></i><span class="hide-menu">Manage Billing</span></a></li> -->
+                        </li>-->
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{url('billing')}}" aria-expanded="false"><i class="mdi mdi-credit-card"></i><span class="hide-menu">Manage Billing</span></a></li>
                         <!-- <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-move-resize-variant"></i><span class="hide-menu">Addons </span></a>
                             <ul aria-expanded="false" class="collapse  first-level">
                                 <li class="sidebar-item"><a href="index2.html" class="sidebar-link"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu"> Dashboard-2 </span></a></li>

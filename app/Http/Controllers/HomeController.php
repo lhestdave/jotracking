@@ -38,8 +38,9 @@ class HomeController extends Controller
       $clientcount = Client::count();
       $jocount = Joborder::count();
       $taskcount = Task::count();
+      $jonotes = DB::table('vwjoupdates')->orderBy('datecreated', 'DESC')->paginate(20);
 
-      return view('home')->with(['clientcount' => $clientcount, 'jocount' => $jocount, 'taskcount' => $taskcount]);
+      return view('home')->with(['clientcount' => $clientcount, 'jocount' => $jocount, 'taskcount' => $taskcount, 'jonotes'=>$jonotes]);
     }
     public function getTasks(Request $request)
     {
