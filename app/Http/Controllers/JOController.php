@@ -113,13 +113,13 @@ class JOController extends Controller
       return view('jo.create')->with(['clients'=>$clients,'users'=>$users, 'admin'=>$admin]);
     }else{
       if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
-        $jos = DB::table('vwjosdetails')->paginate(15);
+        $jos = DB::table('vwjosdetails')->get(); //->paginate(15);
         $admin = [];
         $admin['admin'] = 'admin';
         return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
       }else{
         $admin = [];
-        $jos = DB::table('vwjosdetails')->where(['assignedto'=>Auth::user()->id])->paginate(15);
+        $jos = DB::table('vwjosdetails')->where(['assignedto'=>Auth::user()->id])->get(); //->paginate(15);
         return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
       }
     }
@@ -183,10 +183,10 @@ class JOController extends Controller
         $track->tsid = '1';
         $track->remarks = 'received request';
         $track->uid = Auth::user()->id;
-        $track->save();
+        $jid = $track->save();
       }
       DB::table('jo_transfer')->insert(['joid'=>$joid,'userid'=>$request->input('assignedto'), 'transferby'=>Auth::user()->id,'created_at'=>now()]);
-      return redirect('/jo.p30')->with('success','JO #'.$joid.' has been added.');
+      return redirect('/jo/viewer/'.Auth::user()->id.'/'.$joid)->with('success','JO #'.$joid.' has been added.');
     }else{
       return redirect('/jo/create?cid=$request->input("clientid")')->with('error','Tasks for the JO must be defined. ');
     }
@@ -199,6 +199,24 @@ class JOController extends Controller
   public function getTaskStatus()
   {
     $data = DB::table('taskstatus')->get();
+    return response()->json($data);
+  }
+  public function getTaskNotes(Request $request)
+  {
+    if($request->tnote !== null){
+      $rem = 'working';
+      if($request->input('tasknotes')){
+        $rem = $request->input('tasknotes');
+      }
+      $ttrack = new Tasktracking;
+      $ttrack->tid = $request->tid;
+      $ttrack->tsid = $request->sid;
+      $ttrack->remarks = $request->tnote;
+      $ttrack->uid = Auth::user()->id;
+      $ttrack->save();
+    }
+
+    $data = DB::table('vwtasknotes')->where('tid',$request->tid)->orderBy('created_at','DESC')->get();
     return response()->json($data);
   }
   public function getTaskDetails(Request $request)
@@ -232,6 +250,28 @@ class JOController extends Controller
       $jos = DB::table('vwjosdetails')->where(['cid'=>$request->cid, 'assignedto'=>Auth::user()->id])->paginate(15);
       return view('jo.index')->with('jos',$jos);
     }
+
+    // dd($jos);
+  }
+  //Route::get('/jo/viewer/{userid}/{joid}', 'JOController@viewjoone');
+  public function viewjoone(Request $request)
+  {
+    //vwjosdetails
+    if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
+      $jos = DB::table('vwjosdetails')->where(['id'=>$request->joid])->paginate(15);
+      $admin = [];
+      $admin['admin'] = 'admin';
+      return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin]);
+    }else { //if(Auth::user()->id === $request->userid)
+      $jos = DB::table('vwjosdetails')->where(['id'=>$request->joid])->paginate(15);
+      $admin = [];
+      $admin['admin'] = 'admin';
+      return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin]);
+    }
+    // }else{
+    //   $jos = DB::table('vwjosdetails')->where(['assignedto'=>Auth::user()->id])->paginate(15);
+    //   return view('jo.index')->with('jos',$jos);
+    // }
 
     // dd($jos);
   }

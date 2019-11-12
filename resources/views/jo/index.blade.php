@@ -114,7 +114,7 @@
                             ?></td>
                            <td>
                            <p>
-                             @if(count($admin) > 0 && $perx != 100)
+                             @if(isset($admin) && $perx != 100)
                              <button class="btn btn-secondary btn-xs" type="button" rel="tooltip" title="Transfer assignment" data-toggle="modal" data-target="#transferJOModal"
                                     onclick="getJoidTransfer({{$jo->id}})">
                                <i class="fas fa-address-book" aria-hidden="true"></i> Transfer
@@ -160,40 +160,7 @@
     <!-- ============================================================== -->
     <!-- End Container fluid  -->
     <!-- ============================================================== -->
-<!-- Modal -->
-<div class="modal fade" id="updateTaskModal" tabindex="-1" role="dialog" aria-labelledby="updateTaskModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-md" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Update Task Status</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form class="form-horizontal" id="joForm" action="{{url('/jo/addtasktracking')}}" method="post">
-          {{ csrf_field() }}
-          <input type="text" name="taskid" id="taskid" value="" hidden>
-          <div class="form-group col-sm-12">
-            <label for="taskstatus">Change status to:</label>
-            <select id="ctaskstatus" name="ctaskstatus" class="form-control" required>
-              <!-- <option selected>Choose....</option> -->
-            </select>
-          </div>
-          <div class="form-group col-sm-12">
-            <label for="tasknotes">Add Notes/Remarks:(e.g. Docs Details)</label>
-            <textarea type="textarea" name="tasknotes" id="tasknotes" rows = "3" col="50" class="form-control" required></textarea>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button type="reset" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button type="submit"  onclick="form_submit()" class="btn btn-primary btn-sm">Save changes</button>
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
-<!-- End Modal -->
+
 <!-- Modal -->
 <div class="modal fade" id="transferJOModal" tabindex="-1" role="dialog" aria-labelledby="transferJOModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-md" role="document">
@@ -265,6 +232,63 @@
   </div>
 </div>
 <!-- End Modal -->
+<!-- Modal -->
+<div class="modal fade" id="updateTaskModal" tabindex="-1" role="dialog" aria-labelledby="updateTaskModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Task Status</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" id="joForm" action="{{url('/jo/addtasktracking')}}" method="post">
+          {{ csrf_field() }}
+          <input type="text" name="taskid" id="taskid" value="" hidden>
+          <div class="form-group col-sm-12">
+            <label for="taskstatus">Change status to:</label>
+            <select id="ctaskstatus" name="ctaskstatus" class="form-control" required>
+              <!-- <option selected>Choose....</option> -->
+            </select>
+          </div>
+          <div class="form-group col-sm-12">
+            <label for="tasknotes">Add Notes/Remarks:(e.g. Docs Details)</label>
+            <textarea type="textarea" name="tasknotes" id="tasknotes" rows = "3" col="50" class="form-control" required></textarea>
+          </div>
+          <div class="form-group col-sm-12">
+          <button type="button" class="btn btn-info mt-2 float-right" id="btnSave" onClick="saveTaskNotes()"> Save</button>
+        </div>
+      </div>
+      <div class="form-group col-sm-12">
+      <table class="table table-sm" id="tbltasknotes">
+      <thead>
+        <tr>
+          <th scope="col" >Date</th>
+          <th scope="col">Status</th>
+          <th scope="col">Remarks</th>
+
+        </tr>
+      </thead>
+      <tbody id="tasknotestable">
+        <!-- <tr>
+          <td>12Date</td>
+          <td>Processing</td>
+          <td>10Remarks</td>
+        </tr> -->
+      </tbody>
+    </table>
+                        </div>
+
+      <div class="modal-footer">
+        <button type="reset" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+        <!-- <button type="submit"  onclick="form_submit()" class="btn btn-primary btn-sm">Save changes</button> -->
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
 
 
 
@@ -272,23 +296,23 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-    <script src="../../assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="{{url('../../assets/libs/jquery/dist/jquery.min.js')}}"></script>
     <!-- Bootstrap tether Core JavaScript -->
-    <script src="../../assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="{{url('../../assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
     <script src="../../assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- slimscrollbar scrollbar JavaScript -->
-    <script src="../../assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
-    <script src="../../assets/extra-libs/sparkline/sparkline.js"></script>
+    <script src="{{url('../../assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js')}}"></script>
+    <script src="{{url('../../assets/extra-libs/sparkline/sparkline.js')}}"></script>
     <!--Wave Effects -->
-    <script src="../../dist/js/waves.js"></script>
+    <script src="{{url('../../dist/js/waves.js')}}"></script>
     <!--Menu sidebar -->
-    <script src="../../dist/js/sidebarmenu.js"></script>
+    <script src="{{url('../../dist/js/sidebarmenu.js')}}"></script>
     <!--Custom JavaScript -->
-    <script src="../../dist/js/custom.min.js"></script>
+    <script src="{{url('../../dist/js/custom.min.js')}}"></script>
     <!-- this page js -->
-    <script src="../../assets/extra-libs/multicheck/datatable-checkbox-init.js"></script>
-    <script src="../../assets/extra-libs/multicheck/jquery.multicheck.js"></script>
-    <script src="../../assets/extra-libs/DataTables/datatables.min.js"></script>
+    <script src="{{url('../../assets/extra-libs/multicheck/datatable-checkbox-init.js')}}"></script>
+    <script src="{{url('../../assets/extra-libs/multicheck/jquery.multicheck.js')}}"></script>
+    <script src="{{url('../../assets/extra-libs/DataTables/datatables.min.js')}}"></script>
     <script>
         /****************************************
          *       Basic Table                   *
@@ -498,6 +522,97 @@
   function form_submit1() {
     document.getElementById("transferForm").submit();
   }
+  function gettaskStatus(tid, tsid)
+  {
+    $('input#taskid').val(tid);
+    $.ajax({
+          type: 'POSt',
+          url: '/jo/gettaskstatus',
+          data: {
+              '_token': $('input[name=_token]').val(),
+          },
+          success: function(data){
+              //console.log(data);
+              $("#ctaskstatus").children('option').remove();
+              for (var i = 1; i < data.length; i++) { //var i = parseInt(tsid)
+                $("#ctaskstatus").append('<option value="'+data[i].id+'">'+data[i].state+'</option>');
+              }
+          },
+          error:function(data)
+          {
+             console.log(data);
+          }
+      });
+
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+          $.ajax({
+            type: 'POST',
+            url: '/jo/gettasknotes',
+            data: {
+                '_token': $('input[name=_token]').val(),
+                'tid' : tid
+            },
+            success: function(data){
+              console.log(data);
+                $("table#tbltasknotes tr").remove();
+                for (var i = 0; i < data.length; i++) {
+                  var markup = "<tr><td  width='20%'>" + data[i].created_at + "</td><td  width='10%'>" + data[i].status + "</td><td  width='70%'><strong>" + data[i].name +'</strong><br>' + data[i].remarks + "</td></tr>";
+                  $("table#tbltasknotes").append(markup);
+                }
+
+            },
+            error:function(data)
+            {
+              console.log(data);
+            }
+          });
+  }
+
+function saveTaskNotes(){
+  var tid = document.getElementById('taskid').value;
+  var sid = document.getElementById('ctaskstatus').value;
+  var tnote = document.getElementById('tasknotes').value;
+  document.getElementById("tasknotes").value = '';
+  var d = Date(Date.now('01-25-2009'));
+  var table = document.getElementById("tasknotestable");
+  var row = table.insertRow(0);
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+  var cell2 = row.insertCell(2);
+  $.ajaxSetup({
+      headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
+      $.ajax({
+        type: 'POST',
+        url: '/jo/gettasknotes',
+        data: {
+            '_token': $('input[name=_token]').val(),
+            'tid' : tid,
+            'sid' : sid,
+            'tnote' : tnote
+        },
+        success: function(data){
+          console.log(data);
+            $("table#tbltasknotes tr").remove();
+            for (var i = 0; i < data.length; i++) {
+              var markup = "<tr><td  width='20%'>" + data[i].created_at + "</td><td  width='10%'>" + data[i].status + "</td><td  width='70%'><strong>" + data[i].name +'</strong><br>' + data[i].remarks + "</td></tr>";
+              $("table#tbltasknotes").append(markup);
+            }
+
+        },
+        error:function(data)
+        {
+          console.log(data);
+        }
+      });
+
+}
 
     </script>
 

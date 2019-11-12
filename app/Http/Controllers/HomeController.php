@@ -38,7 +38,13 @@ class HomeController extends Controller
       $clientcount = Client::count();
       $jocount = Joborder::count();
       $taskcount = Task::count();
-      $jonotes = DB::table('vwjoupdates')->orderBy('datecreated', 'DESC')->paginate(20);
+
+     // if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
+        $jonotes = DB::table('vwjoupdates')->orderBy('datecreated', 'DESC')->paginate(20);
+      // }else{
+      //   $jonotes = DB::table('vwjoupdates')->where('assigned',Auth::user()->id)->orderBy('datecreated', 'DESC')->paginate(20);
+      // }
+      
 
       return view('home')->with(['clientcount' => $clientcount, 'jocount' => $jocount, 'taskcount' => $taskcount, 'jonotes'=>$jonotes]);
     }
