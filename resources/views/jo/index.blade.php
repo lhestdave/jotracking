@@ -61,6 +61,7 @@
                 <?php $perx = 0; ?>
                     @if(count($jos) > 0)
                         @foreach($jos as $jo)
+                        @if($jo->sumofstatus != 0)
                         <?php $perx = number_format($jo->sumofstatus/($jo->jcount*$jo->maxstate)*100); ?>
                     <tr id="tr">
                            <td>{{$jo->id}}</td>
@@ -127,6 +128,7 @@
                          </td>
                          <td class="details-control" data-jo="{{$jo->id}}"></td>
                     </tr>
+                    @endif
                     @endforeach
                     @endif
 
@@ -243,6 +245,7 @@
         </button>
       </div>
       <div class="modal-body">
+      <div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">50%</div>
         <form class="form-horizontal" id="joForm" action="{{url('/jo/addtasktracking')}}" method="post">
           {{ csrf_field() }}
           <input type="text" name="taskid" id="taskid" value="" hidden>
@@ -340,7 +343,7 @@
 
         /* Formatting function for row details - modify as you need */
         function format ( d ) {
-            var thd = '<thead><tr><th></th><th>Task Description</th><th>Lead Time</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>';
+            var thd = '<thead><tr><th></th><th>Task Description</th><th>Lead Time</th><th>Status</th><th>Action</th></tr></thead>';
                 var tb = '<tbody id="tbody'+jid+'"></tbody>';
                     return '<table cellpadding="5" cellspacing="0" border="1px" style="padding-right:100px;padding-left:100px;width:100%">'+
                                 thd +
@@ -387,12 +390,12 @@
                 
                 for (var i = 0; i < data.length; i++) {
                     if(data[i].tsid == 7){
-                    markup += '<tr class="trtask"><td >'+(i+1)+'</td><td>'+data[i].taskname+'</td><td >'+data[i].leadtime+'</td><td >'+data[i].amount+'</td><td>['+data[i].name+']:'+data[i].state+'<br>'+data[i].st+'</td><td>'+
+                    markup += '<tr class="trtask"><td >'+(i+1)+'</td><td>'+data[i].taskname+'</td><td >'+data[i].leadtime+'</td><td>['+data[i].name+']:'+data[i].state+'<br>'+data[i].st+'</td><td>'+
                     '<button class="btn btn-outline-primary my-2 my-sm-0 btn-sm taskstatus" data-toggle="modal" data-target="#updateTaskModal" type="button" onclick="gettaskStatus('+data[i].tid+','+data[i].tsid+')" rel="tooltip" title="Update Status" disabled><span class="fa fa-edit"></span></button> '+
                     ''+
                     '</td></tr>';
                     }else{
-                    markup += '<tr class="trtask"><td >'+(i+1)+'</td><td>'+data[i].taskname+'</td><td >'+data[i].leadtime+'</td><td >'+data[i].amount+'</td><td>['+data[i].name+']:'+data[i].state+'<br>'+data[i].st+'</td><td>'+
+                    markup += '<tr class="trtask"><td >'+(i+1)+'</td><td>'+data[i].taskname+'</td><td >'+data[i].leadtime+'</td><td>['+data[i].name+']:'+data[i].state+'<br>'+data[i].st+'</td><td>'+
                     '<button class="btn btn-outline-primary my-2 my-sm-0 btn-sm taskstatus" data-toggle="modal" data-target="#updateTaskModal" type="button" onclick="gettaskStatus('+data[i].tid+','+data[i].tsid+')" rel="tooltip" title="Update Status" ><span class="fa fa-edit"></span></button> '+
                     ''+
                     '</td></tr>';
@@ -560,7 +563,7 @@
               console.log(data);
                 $("table#tbltasknotes tr").remove();
                 for (var i = 0; i < data.length; i++) {
-                  var markup = "<tr><td  width='20%'>" + data[i].created_at + "</td><td  width='10%'>" + data[i].status + "</td><td  width='70%'><strong>" + data[i].name +'</strong><br>' + data[i].remarks + "</td></tr>";
+                  var markup = "<tr><td  width='20%'>" + data[i].created_at + "</td><td  width='70%'><strong>" + data[i].name +'</strong><br>' + data[i].remarks + "</td></tr>";
                   $("table#tbltasknotes").append(markup);
                 }
 
@@ -601,7 +604,7 @@ function saveTaskNotes(){
           console.log(data);
             $("table#tbltasknotes tr").remove();
             for (var i = 0; i < data.length; i++) {
-              var markup = "<tr><td  width='20%'>" + data[i].created_at + "</td><td  width='10%'>" + data[i].status + "</td><td  width='70%'><strong>" + data[i].name +'</strong><br>' + data[i].remarks + "</td></tr>";
+              var markup = "<tr><td  width='20%'>" + data[i].created_at + "</td><td  width='80%'><strong>" + data[i].name +'</strong><br>' + data[i].remarks + "</td></tr>";
               $("table#tbltasknotes").append(markup);
             }
 
