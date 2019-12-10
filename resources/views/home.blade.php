@@ -84,7 +84,7 @@
                                         <div class="p-2"><img src="../../assets/images/users/1.jpg" alt="user" width="50" class="rounded-circle"></div>
                                         <div class="comment-text w-100">
                                             <h6 class="font-medium">JO# {{$jon->joid}} of <strong>{{$jon->joclient}}</strong></h6>
-                                            <span class="m-b-15 d-block">Notes from <em>{{$jon->name}}</em>: {{$jon->note}} </span>
+                                            <span class="m-b-15 d-block">Notes from <em>{{$jon->name}}</em>: <br><?php echo html_entity_decode( $jon->note ) ?> </span>
                                             <div class="comment-footer">
                                                 <span class="text-muted float-right">{{date('F d, Y', strtotime($jon->datecreated))}}</span> 
                                                 <!-- <button type="button" class="btn btn-cyan btn-sm">View</button> -->

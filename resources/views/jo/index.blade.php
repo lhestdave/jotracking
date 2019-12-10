@@ -207,7 +207,7 @@
         <br>
         <input type="text" id="txtjoid" name="txtjoid" hidden/>
         <label for="txtnotes">Add Notes/Remarks:(e.g. Docs Details)</label>
-        <textarea type="textarea" name="txtnotes" id="txtnotes" rows = "3" col="50" class="form-control" required></textarea>
+        <textarea type="textarea" name="txtnotes" id="txtnotes" rows = "3" col="50" class="form-control" onkeydown="search(this)" required></textarea>
         <button type="button" class="btn btn-info mt-2 float-right" id="btnSave" onCLick="saveNotesToDB()"> Save</button>
       </div>
       <div class="form-group col-sm-12 ">
@@ -245,8 +245,9 @@
         </button>
       </div>
       <div class="modal-body">
-      <div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">50%</div>
-        <form class="form-horizontal" id="joForm" action="{{url('/jo/addtasktracking')}}" method="post">
+      <div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" id="taskprogress" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100" style="width: 5%">50%</div>
+      <p id="task"> Test Task </p> 
+      <form class="form-horizontal" id="joForm" action="{{url('/jo/addtasktracking')}}" method="post">
           {{ csrf_field() }}
           <input type="text" name="taskid" id="taskid" value="" hidden>
           <div class="form-group col-sm-12">
@@ -257,7 +258,7 @@
           </div>
           <div class="form-group col-sm-12">
             <label for="tasknotes">Add Notes/Remarks:(e.g. Docs Details)</label>
-            <textarea type="textarea" name="tasknotes" id="tasknotes" rows = "3" col="50" class="form-control" required></textarea>
+            <textarea type="textarea" name="tasknotes" id="tasknotes" rows = "3" col="50" class="form-control"  onkeydown="search(this)" required></textarea>
           </div>
           <div class="form-group col-sm-12">
           <button type="button" class="btn btn-info mt-2 float-right" id="btnSave" onClick="saveTaskNotes()"> Save</button>
@@ -317,6 +318,13 @@
     <script src="{{url('../../assets/extra-libs/multicheck/jquery.multicheck.js')}}"></script>
     <script src="{{url('../../assets/extra-libs/DataTables/datatables.min.js')}}"></script>
     <script>
+      function search(ele) {
+          if(event.key === 'Enter') {
+            $("textarea#tasknotes").val(ele.value + "<br>");
+            $("textarea#txtnotes").val(ele.value + "<br>");
+              //alert(ele.value);        
+          }
+      }
         /****************************************
          *       Basic Table                   *
          ****************************************/
@@ -391,12 +399,12 @@
                 for (var i = 0; i < data.length; i++) {
                     if(data[i].tsid == 7){
                     markup += '<tr class="trtask"><td >'+(i+1)+'</td><td>'+data[i].taskname+'</td><td >'+data[i].leadtime+'</td><td>['+data[i].name+']:'+data[i].state+'<br>'+data[i].st+'</td><td>'+
-                    '<button class="btn btn-outline-primary my-2 my-sm-0 btn-sm taskstatus" data-toggle="modal" data-target="#updateTaskModal" type="button" onclick="gettaskStatus('+data[i].tid+','+data[i].tsid+')" rel="tooltip" title="Update Status" disabled><span class="fa fa-edit"></span></button> '+
+                    '<button class="btn btn-outline-primary my-2 my-sm-0 btn-sm taskstatus" data-toggle="modal" data-target="#updateTaskModal" type="button" onclick="gettaskStatus('+data[i].tid+','+data[i].tsid+',\''+data[i].taskname+'\',\'' + data[i].state +'\')" rel="tooltip" title="Update Status" disabled><span class="fa fa-edit"></span></button> '+
                     ''+
                     '</td></tr>';
                     }else{
                     markup += '<tr class="trtask"><td >'+(i+1)+'</td><td>'+data[i].taskname+'</td><td >'+data[i].leadtime+'</td><td>['+data[i].name+']:'+data[i].state+'<br>'+data[i].st+'</td><td>'+
-                    '<button class="btn btn-outline-primary my-2 my-sm-0 btn-sm taskstatus" data-toggle="modal" data-target="#updateTaskModal" type="button" onclick="gettaskStatus('+data[i].tid+','+data[i].tsid+')" rel="tooltip" title="Update Status" ><span class="fa fa-edit"></span></button> '+
+                    '<button class="btn btn-outline-primary my-2 my-sm-0 btn-sm taskstatus" data-toggle="modal" data-target="#updateTaskModal" type="button" onclick="gettaskStatus('+data[i].tid+','+data[i].tsid+',\''+data[i].taskname+'\',\'' + data[i].state +'\')" rel="tooltip" title="Update Status" ><span class="fa fa-edit"></span></button> '+
                     ''+
                     '</td></tr>';
                     }
@@ -525,8 +533,34 @@
   function form_submit1() {
     document.getElementById("transferForm").submit();
   }
-  function gettaskStatus(tid, tsid)
+
+  function gettaskStatus(tid, tsid, tn, s)
   {
+    $("#taskprogress").text(s);
+    if( s == 'received'){
+      $("div#taskprogress").css("width","14%");
+      $("#taskprogress").text(s+ " - 14%" );
+    }else if( s == 'processing'){
+      $("div#taskprogress").css("width","29%");
+      $("#taskprogress").text(s+ " - 29%" );
+    }else if( s == 'followup'){
+      $("div#taskprogress").css("width","43%");
+      $("#taskprogress").text(s+ " - 43%" );
+    }else if( s == 'stuck or pending'){
+      $("div#taskprogress").css("width","57%");
+      $("#taskprogress").text(s+ " - 57%" );
+    }else if( s == 'negotiating'){
+      $("div#taskprogress").css("width","72%");
+      $("#taskprogress").text(s+ " - 72%" );
+    }else if( s == 'done'){
+      $("div#taskprogress").css("width","86%");
+      $("#taskprogress").text(s+ " - 86%" );
+    }else{
+      $("div#taskprogress").css("width","100%");
+      $("#taskprogress").text(s+ " - 100%" );
+    }
+    
+    $("#task").html("Task: " + tn);
     $('input#taskid').val(tid);
     $.ajax({
           type: 'POSt',
@@ -560,7 +594,7 @@
                 'tid' : tid
             },
             success: function(data){
-              console.log(data);
+                //console.log(data);
                 $("table#tbltasknotes tr").remove();
                 for (var i = 0; i < data.length; i++) {
                   var markup = "<tr><td  width='20%'>" + data[i].created_at + "</td><td  width='70%'><strong>" + data[i].name +'</strong><br>' + data[i].remarks + "</td></tr>";
@@ -601,7 +635,7 @@ function saveTaskNotes(){
             'tnote' : tnote
         },
         success: function(data){
-          console.log(data);
+          //console.log(data);
             $("table#tbltasknotes tr").remove();
             for (var i = 0; i < data.length; i++) {
               var markup = "<tr><td  width='20%'>" + data[i].created_at + "</td><td  width='80%'><strong>" + data[i].name +'</strong><br>' + data[i].remarks + "</td></tr>";

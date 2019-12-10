@@ -138,7 +138,7 @@
             <div class="form-group">
               <label class="control-label col-sm-2" for="branch" style="text-align:left;">Branch</label>
               <div class="col-sm-12">
-                <input type="text" class="form-control" id="branch" placeholder="Enter Branch" name="branch" value="{{ old('branch') }}">
+                <input type="text" class="form-control" id="branch" placeholder="Enter Branch" name="branch" value="{{ old('branch') }}" required>
               </div>
             </div>
             <div class="form-group">
