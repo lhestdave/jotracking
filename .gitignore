@@ -11,3 +11,5 @@ npm-debug.log
 yarn-error.log
 - Copy.env
 .env.example
+crm.sql
+views.txt
