@@ -3,8 +3,21 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
+            @if(session('success'))
+            <div class="col-md-10 col-md-offset-1">
+                <div class="alert alert-success">
+                    Success! You have registered, please check your email for more instructions!
+                </div>
+            </div>
+            @elseif(session('error'))
+            <div class="col-md-10 col-md-offset-1">
+                <div class="alert alert-danger">
+                    Error! We cannot processed your request, please contact the admin.!
+                </div>
+            </div>
+            @endif
                 <div class="card-header">{{ __('Register') }}</div>
 
                 <div class="card-body">

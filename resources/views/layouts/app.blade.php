@@ -214,7 +214,7 @@
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="mdi mdi-account font-24"></i>
+                            <i class="mdi mdi-account font-24"></i>{{Auth::user()->name}}
                                 <!-- <img src="{{url('assets/images/users/1.jpg')}}" alt="user" class="rounded-circle" width="31"> -->
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated">
@@ -258,7 +258,7 @@
                         <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-key"></i><span class="hide-menu">Manage Users </span></a>
                             <ul aria-expanded="false" class="collapse  first-level">
                                 <li class="sidebar-item"><a href="{{url('superadmin/users')}}" class="sidebar-link"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu"> List of Users</span></a></li>
-                                <li class="sidebar-item"><a href="pages-gallery.html" class="sidebar-link"><i class="mdi mdi-multiplication-box"></i><span class="hide-menu"> Create New Account </span></a></li>
+                                <li class="sidebar-item"><a href="{{url('register')}}" class="sidebar-link"><i class="mdi mdi-multiplication-box"></i><span class="hide-menu"> Create New Account </span></a></li>
                             </ul>
                         </li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{url('clients')}}" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">Manage Clients</span></a></li>
@@ -331,7 +331,7 @@
             <!-- footer -->
             <!-- ============================================================== -->
             <footer class="footer text-center">
-                All Rights Reserved by &copy DavWorkx Asia. Designed by <a href="https://wrappixel.com">WrapPixel</a>. Developed by <a href="http://davworkxasia.com">DavWorkx Asia Solutions</a>.
+                All Rights Reserved by &copy Opamin CPAs. Designed by <a href="https://wrappixel.com">WrapPixel</a>. Developed by <a href="http://davworkxasia.com">DavWorkx Asia Solutions</a>.
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->
