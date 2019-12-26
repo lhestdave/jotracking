@@ -33,13 +33,16 @@
                 <div class="row">
                         <!-- Column -->
                         <div class="col-md-6 col-lg-3">
+                        <a href="{{url('home')}}">
                             <div class="card card-hover">
                                 <div class="box bg-cyan text-center">
                                     <h1 class="font-light text-white"><i class="mdi mdi-view-dashboard"></i></h1>
                                     <h6 class="text-white">Dashboard</h6>
                                 </div>
                             </div>
+                            </a>
                         </div>
+                        
                         <!-- Column -->
                         <div class="col-md-6 col-lg-3">
                             <div class="card card-hover">

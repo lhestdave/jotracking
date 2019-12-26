@@ -71,6 +71,11 @@ Route::get('/clear-cache', function() {
     return 'DONE'; //Return anything
 });
 
+Route::get('/down', function() {
+  $exitCode = Artisan::call('down');
+  return redirect('/errors/503'); //Return anything
+});
+
 Route::get('/changepass', 'HomeController@changePass');
 Route::post('/savechangepass', 'HomeController@saveChangePass');
 
