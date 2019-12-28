@@ -83,11 +83,31 @@
                         <div class="col-md-6">
                              <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title"></h4>
+                                    <h4 class="card-title">Latest JO Notes</h4>
                                 </div>
                                 <div class="comment-widgets scrollable">
                                 
-
+                                @if(count($jonotes) > 0)
+                                    @foreach($jonotes as $jon)
+                                    <!-- Comment Row -->
+                                    <a href="{{url('jo/viewer/'.Auth::user()->id.'/'.$jon->joid)}}">
+                                    <div class="d-flex flex-row comment-row m-t-0">
+                                        <div class="p-2"><img src="../../assets/images/users/1.jpg" alt="user" width="50" class="rounded-circle"></div>
+                                        <div class="comment-text w-100">
+                                            <h6 class="font-medium">JO# {{$jon->joid}} of <strong>{{$jon->joclient}}</strong></h6>
+                                            <span class="m-b-15 d-block">Notes from <em>{{$jon->name}}</em>: <br><?php echo html_entity_decode( $jon->note ) ?> </span>
+                                            <div class="comment-footer">
+                                                <span class="text-muted float-right">{{date('F d, Y', strtotime($jon->datecreated))}}</span> 
+                                                <!-- <button type="button" class="btn btn-cyan btn-sm">View</button> -->
+                                                <!-- <button type="button" class="btn btn-success btn-sm">Publish</button>
+                                                <button type="button" class="btn btn-danger btn-sm">Delete</button> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </a>
+                                    @endforeach
+                                @endif
+                                {{ $jonotes->links() }}
 
                                     <!-- Comment Row -->
                                     <!-- <div class="d-flex flex-row comment-row">

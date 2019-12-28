@@ -124,6 +124,10 @@
                              <button class="btn btn-primary btn-xs mt-2" type="button" rel="tooltip" title="Add Notes/Updates"  data-toggle="modal" id="addNotes" data-target="#addNoteJO" onClick="saveNotes({{$jo->id}})" >
                              <i class="far fa-newspaper" aria-hidden="true"></i> Add Notes
                              </button>
+
+                             <button class="btn btn-primary btn-xs mt-2" type="button" rel="tooltip" title="Chat"  data-toggle="modal" id="chat" data-target="#createConvo" onClick="createConvo( {{$jo->assignedto}}, '{{$jo->username}}' , {{$jo->id}} , '{{$jo->clientname}}' )" >
+                             <i class="mdi mdi-message" aria-hidden="true"></i> Chat
+                             </button>
                            </p>
                          </td>
                          <td class="details-control" data-jo="{{$jo->id}}"></td>
@@ -294,6 +298,38 @@
 </div>
 <!-- End Modal -->
 
+<!-- Modal -->
+<div class="modal fade" id="createConvo" tabindex="-1" role="dialog" aria-labelledby="createConvo" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create Conversation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="{{url('createchat')}}" method="post">
+        @csrf
+      <div class="form-group col-sm-12 ">
+        <br>
+      <ul class="list-group">
+        <li class="list-group-item" id="touser"></li><input type="text" name="touser" id="touser"  hidden/>
+        <li class="list-group-item" id="joid"></li><input type="text" name="joid" id="joid" hidden/>
+        <li class="list-group-item" id="clientname"></li>
+        <li class="list-group-item" >MESSAGE: <input type="text" class="col-sm-12" name="message" id="message" autofocus required/> </li>
+      </ul>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm">Send</button>            
+        <button type="reset" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+      </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
 
 
 
@@ -648,6 +684,16 @@ function saveTaskNotes(){
           console.log(data);
         }
       });
+
+}
+function createConvo(touser, user, joid, clientname){
+
+  $("li#touser").text("TO: " + user.toString());
+  $("input#touser").val(touser);
+  $("li#joid").text("JO#: " + joid.toString());
+  $("input#joid").val(joid);
+  $("li#clientname").text("CLIENT: "+clientname);
+
 
 }
 

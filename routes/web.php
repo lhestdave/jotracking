@@ -18,8 +18,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/message/{id}', 'HomeController@getMessage')->name('message');
+Route::post('message', 'HomeController@sendMessage');
 
-Auth::routes();
 Auth::routes(['verify' => true]);
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -83,3 +84,8 @@ Route::get('/tasks', 'HomeController@getTasks')->name('tasks');
 Route::get('/mytasks', 'HomeController@getMyTasks')->name('mytasks');
 
 Route::get('/profile', 'HomeController@profile')->name('profile');
+
+Route::post('/createchat', 'MessageController@createChat');
+Route::get('/messenger', 'MessageController@index');
+Route::get('/message/{id}', 'MessageController@getMessage')->name('message');
+Route::post('message', 'MessageController@sendMessage');
