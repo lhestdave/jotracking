@@ -83,7 +83,7 @@ class ClientController extends Controller
     if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
       $admin['admin'] = 'admin';
     }
-    $clients = DB::select("SELECT clients.* FROM clients WHERE clients.id=clients.parentID"); //Client::where(['id' => 'parentID3'])->get();
+    $clients = DB::select("SELECT clients.* FROM vwclientdetails as clients WHERE clients.id=clients.parentID"); //Client::where(['id' => 'parentID3'])->get();
     // $requestJSON = $clients[0];
     // $requestJSON->lester = 205454;
      //dd($clients);
@@ -92,8 +92,8 @@ class ClientController extends Controller
   }
   public function getClientDetail(Request $request)
   {
-    $data = DB::table('clients')->where('id',$request->id)->get();
-    $branch =  DB::select("SELECT clients.* FROM clients WHERE $request->id = clients.parentID and clients.id != clients.parentID");
+    $data = DB::table('vwclientdetails')->where('id',$request->id)->get();
+    $branch =  DB::select("SELECT clients.* FROM vwclientdetails as clients WHERE $request->id = clients.parentID and clients.id != clients.parentID");
     $responseJson = [];
     $responseJson = ["clientID" => $request->id, "data" => $data, "branch" => $branch ];
     return response()->json($responseJson);
@@ -105,5 +105,26 @@ class ClientController extends Controller
     $clients = DB::table('vwclientdetails')->where(['id'=> $cid])->get();
 
     return view('client.details')->with(['clients'=>$clients]);
+  }
+  public function update(Request $request)
+  {
+    $data = DB::table('clients')
+        ->updateOrInsert(
+        ['id' => $request->cid],
+        ['clientname' => $request->cname, 'branch'=>$request->branch, 'busadd'=>$request->busadd, 'tin'=>$request->tin , 'email'=>$request->email, 'contactno'=>$request->contactno ,'cperson'=>$request->cperson , 'encodedby'=>Auth::user()->id]
+    );
+    if( $request->cid !== null ||  $request->cid === ''){
+      $data = DB::table('clients_data')
+        ->updateOrInsert(
+        ['clientid' => $request->cid],
+        ['businessID' => $request->businessID, 'RDO'=>$request->rdo, 'tax_class'=>$request->tax_class, 'tax_type'=>$request->tax_type , 'date_registered'=>$request->date_r]
+      );
+    }
+    return response()->json($data);
+  }
+  public function getFormList(Request $request)
+  {
+    $data = DB::table('forms')->get();
+    return response()->json($data);
   }
 }

@@ -56,6 +56,7 @@ Route::get('/jo/user/{id}', 'JOController@getJOperUser');
 Route::get('/clients', 'ClientController@index');
 Route::post('/addnewclient', 'ClientController@store');
 Route::post('/clients/search', 'ClientController@search');
+Route::post('/clients/update', 'ClientController@update');
 
 Route::get('/clientsprofiling', 'ClientController@getClientList');
 Route::post('/client/getdetail', 'ClientController@getClientDetail');
@@ -97,7 +98,7 @@ Route::post('message', 'MessageController@sendMessage');
 Route::get('laravel-send-email', 'EmailController@sendEMail');
 
 Route::get('test', function() {
-  Storage::disk('google')->put('test.txt', 'Hello World');
+  Storage::disk('google')->put-existing('images/3c180c17d9c33a42dc10cb19d262191c.jpg');
 });
 
 Route::get('filelist', 'GoogleDriveController@getFileList');
@@ -121,7 +122,7 @@ Route::get('get', function() {
 });
 
 Route::get('put', function() {
-  Storage::cloud()->put('11GqugnN5_UXTFSZQ4rUlxh25aJH1kqFT/test.txt', 'Hello World');
+  Storage::cloud()->put('test.txt', 'Hello World');
   return 'File was saved to Google Drive';
 });
 
@@ -135,10 +136,56 @@ Route::get('list', function() {
   $recursive = false; // Get subdirectories also?
   $contents = collect(Storage::cloud()->listContents($dir, $recursive));
 
-  return $contents->where('type', '=', 'dir'); // directories
+  //return $contents->where('type', '=', 'dir'); // directories
   return $contents->where('type', '=', 'file'); // files
 });
 
 
 Route::get('multifileupload', 'HomeController@multifileupload')->name('multifileupload');
 Route::post('multifileupload', 'HomeController@store')->name('multifileupload');
+
+Route::get('dropzone/image','ImageController@index');
+Route::post('dropzone/store','ImageController@store');
+
+Route::post('getformlist','ClientController@getFormList');
+
+Route::get('put-existing', function() {
+  $filenameloc = '\images\1579953487402ESP-ppt-16.pdf';
+  $filename = '1579953487402ESP-ppt-16.pdf';
+  $filePath = public_path($filenameloc);
+  $fileData = File::get($filePath);
+
+  $data = Storage::cloud()->put($filename, $fileData);
+  return 'File was saved to Google Drive';
+});
+
+Route::get('get', function() {
+  $filename = '1579953487402ESP-ppt-16.pdf';
+
+  $dir = '/';
+  $recursive = false; // Get subdirectories also?
+  $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+
+  $file = $contents
+      ->where('type', '=', 'file')
+      ->where('filename', '=', pathinfo($filename, PATHINFO_FILENAME))
+      ->where('extension', '=', pathinfo($filename, PATHINFO_EXTENSION))
+      ->first(); // there can be duplicate file names!
+
+  //return $file; // array with file info
+
+  $rawData = Storage::cloud()->get($file['path']);
+  //dd($file['mimetype']);
+  return response($rawData, 200)
+      ->header('ContentType', $file['mimetype'])
+      ->header('Content-Disposition', 'form-data; filename=1579953487402ESP-ppt-16.pdf');
+});
+//https://github.com/ivanvermeyen/laravel-google-drive-demo/blob/master/routes/web.php
+
+Route::get('export/{basename}', function ($basename) {
+    $service = Storage::cloud()->getAdapter()->getService();
+    $mimeType = 'application/pdf';
+    $export = $service->files->export($basename, $mimeType);
+
+    return response($export->getBody(), 200, $export->getHeaders());
+});

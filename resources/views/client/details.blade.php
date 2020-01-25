@@ -39,12 +39,13 @@
                 <div class="card">
                 @if(count($clients) > 0)
                     @foreach($clients as $c)
-                  <form class="form-horizontal">
+                  <form class="form-horizontal" id="clientProfile">
                       <div class="card-body">
                           <h4 class="card-title"></h4>
                           <div class="form-group row">
                               <label for="fname" class="col-sm-3 text-right control-label col-form-label">Name</label>
                               <div class="col-sm-9">
+                                  <input type="text" id="cid" name="cid" value="{{$c->id}}" hidden>
                                   <input type="text" class="form-control" id="clientname" name="clientname" value="{{$c->clientname}}" disabled>
                               </div>
                           </div>
@@ -148,24 +149,51 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Files</h5>
-                        <table id="client-table" class="display" style="width:100%">
+                        <h5 class="card-title">Files &nbsp  <button type="button" class="btn btn-primary btn-sm" id="uploadFile" data-toggle="modal" data-target="#addFileModal" >
+                           <i class="fas fa-file-alt"></i>&nbsp Upload</button> </h5>
+                        <table id="zero_config" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>ID#</th>
-                                    <th>Year</th>
-                                    <th>Form</th>
-                                    <th>Office/Agency</th>
-                                    <th>Action</th>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                    <th>Office</th>
+                                    <th>Age</th>
+                                    <th>Start date</th>
+                                    <th>Salary</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>fff</td>
-                                    <td>vffg</td>
-                                    <td>Engr</td>
-                                    <td>Engr</td>
-                                    <td>Engr</td>
+                                    <td>Tiger Nixon</td>
+                                    <td>System Architect</td>
+                                    <td>Edinburgh</td>
+                                    <td>61</td>
+                                    <td>2011/04/25</td>
+                                    <td>$320,800</td>
+                                </tr>
+                                <tr>
+                                    <td>Garrett Winters</td>
+                                    <td>Accountant</td>
+                                    <td>Tokyo</td>
+                                    <td>63</td>
+                                    <td>2011/07/25</td>
+                                    <td>$170,750</td>
+                                </tr>
+                                <tr>
+                                    <td>Ashton Cox</td>
+                                    <td>Junior Technical Author</td>
+                                    <td>San Francisco</td>
+                                    <td>66</td>
+                                    <td>2009/01/12</td>
+                                    <td>$86,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Cedric Kelly</td>
+                                    <td>Senior Javascript Developer</td>
+                                    <td>Edinburgh</td>
+                                    <td>22</td>
+                                    <td>2012/03/29</td>
+                                    <td>$433,060</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -176,124 +204,68 @@
 
 <!-- Modal -->
 <div class="modal fade" id="addFileModal" tabindex="-1" role="dialog" aria-labelledby="newClientModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add New Client</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add New File</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
       <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Form Elements</h5>
-                                <div class="form-group row">
-                                    <label class="col-md-3 m-t-15">Single Select</label>
-                                    <div class="col-md-9">
-                                        <select class="select2 form-control custom-select" style="width: 100%; height:36px;">
-                                            <option>Select</option>
-                                            <optgroup label="Alaskan/Hawaiian Time Zone">
-                                                <option value="AK">Alaska</option>
-                                                <option value="HI">Hawaii</option>
-                                            </optgroup>
-                                            <optgroup label="Pacific Time Zone">
-                                                <option value="CA">California</option>
-                                                <option value="NV">Nevada</option>
-                                                <option value="OR">Oregon</option>
-                                                <option value="WA">Washington</option>
-                                            </optgroup>
-                                            <optgroup label="Mountain Time Zone">
-                                                <option value="AZ">Arizona</option>
-                                                <option value="CO">Colorado</option>
-                                                <option value="ID">Idaho</option>
-                                                <option value="MT">Montana</option>
-                                                <option value="NE">Nebraska</option>
-                                                <option value="NM">New Mexico</option>
-                                                <option value="ND">North Dakota</option>
-                                                <option value="UT">Utah</option>
-                                                <option value="WY">Wyoming</option>
-                                            </optgroup>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3">Radio Buttons</label>
-                                    <div class="col-md-9">
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" class="custom-control-input" id="customControlValidation1" name="radio-stacked" required>
-                                            <label class="custom-control-label" for="customControlValidation1">First One</label>
-                                        </div>
-                                         <div class="custom-control custom-radio">
-                                            <input type="radio" class="custom-control-input" id="customControlValidation2" name="radio-stacked" required>
-                                            <label class="custom-control-label" for="customControlValidation2">Second One</label>
-                                        </div>
-                                         <div class="custom-control custom-radio">
-                                            <input type="radio" class="custom-control-input" id="customControlValidation3" name="radio-stacked" required>
-                                            <label class="custom-control-label" for="customControlValidation3">Third One</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3">Checkboxes</label>
-                                    <div class="col-md-9">
-                                        <div class="custom-control custom-checkbox mr-sm-2">
-                                            <input type="checkbox" class="custom-control-input" id="customControlAutosizing1">
-                                            <label class="custom-control-label" for="customControlAutosizing1">First One</label>
-                                        </div>
-                                        <div class="custom-control custom-checkbox mr-sm-2">
-                                            <input type="checkbox" class="custom-control-input" id="customControlAutosizing2">
-                                            <label class="custom-control-label" for="customControlAutosizing2">Second One</label>
-                                        </div>
-                                        <div class="custom-control custom-checkbox mr-sm-2">
-                                            <input type="checkbox" class="custom-control-input" id="customControlAutosizing3">
-                                            <label class="custom-control-label" for="customControlAutosizing3">Third One</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3">File Upload</label>
-                                    <div class="col-md-9">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="validatedCustomFile" required>
-                                            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                                            <div class="invalid-feedback">Example invalid custom file feedback</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-3" for="disabledTextInput">Disabled input</label>
-                                    <div class="col-md-9">
-                                        <input type="text" id="disabledTextInput" class="form-control" placeholder="Disabled input" disabled>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="border-top">
-                                <div class="card-body">
-                                    <button type="button" class="btn btn-primary">Submit</button>
-                                </div>
-                            </div>
-                        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-md-3" for="disabledTextInput">Applicable Date</label>
+                <div class="col-md-9">
+                    <input type="date" id="applicableDate" class="form-control" placeholder="Applicable Date" >
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3 m-t-15">Form Type</label>
+                <div class="col-md-9">
+                    <select class="select2 form-control custom-select" id="formType" style="width: 100%; height:36px;">
+                            
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-3">File Upload</label>
+                <div class="col-md-9">
+                <form method="post" action="{{url('dropzone/store')}}" enctype="multipart/form-data"
+                class="dropzone form-group" id="dropzone">
+                @csrf
+                </form>
+                </div>
+            </div>
+        </div>
+        <div class="border-top">
+            <div class="card-body">
+                <center><button type="button" class="btn btn-primary">Save</button></center>
+            </div>
+        </div>
+    </div>
     </div>
   </div>
+</div>
 </div>
 <!-- End Modal -->
 
     
-                    <!-- ============================================================== -->
-                    <!-- End PAge Content -->
-                    <!-- ============================================================== -->
-                    <!-- ============================================================== -->
-                    <!-- Right sidebar -->
-                    <!-- ============================================================== -->
-                    <!-- .right-sidebar -->
-                    <!-- ============================================================== -->
-                    <!-- End Right sidebar -->
-                    <!-- ============================================================== -->
-                </div>
-                <!-- ============================================================== -->
-                <!-- End Container fluid  -->
-                <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Right sidebar -->
+    <!-- ============================================================== -->
+    <!-- .right-sidebar -->
+    <!-- ============================================================== -->
+    <!-- End Right sidebar -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Container fluid  -->
+<!-- ============================================================== -->
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
@@ -316,40 +288,61 @@
 <script src="{{url('../../assets/extra-libs/DataTables/datatables.min.js')}}"></script>
 <script src="{{url('../../assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
 <script src="{{url('../../assets/libs/select2/dist/js/select2.min.js')}}"></script>
-<script>
-    //***********************************//
-    // For select 2
-    //***********************************//
-    $(".select2").select2({
-        placeholder: 'Select a Form Type'
-    });
-    $('select:not(.normal)').each(function () {
-        $(this).select2({
-            dropdownParent: $(this).parent()
-        });
-    });
-    $("#vdn_number").select2({
-        placeholder: "00000",
-        minimumInputLength: 2,
-        ajax: {
-            url: "getAjaxData/",
-            dataType: 'json',
-            type: "POST",
-            data: function (term, page) {
-                return {
-                    q: term, // search term
-                    col: 'vdn'
-                };
-            },
-            results: function (data) { // parse the results into the format expected by Select2.
-                // since we are using custom formatting functions we do not need to alter remote JSON data
-                return {results: data};
-            }
-        }
-    });
-$(document).ready(function() {
-        var isEdit = false;
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/dropzone.js"></script>
 
+
+<script>
+// console.log($( "#cid" ).val());
+
+$(document).ready(function() {
+    var isFormLoaded = false;
+
+    if(isFormLoaded === false){
+        $("#uploadFile").click(function(){
+            $('#formType').find('option').remove();
+            $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+            type: 'POST',
+            url: '/getformlist',
+            data: {
+                '_token': $('input[name=_token]').val(),
+            },
+            success: function(data){
+                //console.log("Data." , data.length);
+                for(var i = 0; i < data.length; i++){
+                    $("#formType").append('<option value="'+data[i].id+'">'+data[i].code + ' '+ data[i].description +'</option>');
+                }
+                isFormLoaded = true;
+            },
+            error:function(data)
+            {
+                console.log(data);
+                isFormLoaded = false;
+            }
+            });
+        });
+    }
+    //     //***********************************//
+    // // For select 2
+    // //***********************************//
+    // $(".select2").select2({
+    //     placeholder: 'Select a Form Type'
+    // });
+    // $('select:not(.normal)').each(function () {
+    //     $(this).select2({
+    //         dropdownParent: $(this).parent()
+    //     });
+    // });
+    /****************************************
+     *       Basic Table                   *
+     ****************************************/
+    $('#zero_config').DataTable();
+
+        var isEdit = false;
         $("#editBtn").click(function(){
             if(isEdit){
                 $("#editBtn").html('<i class="fas fa-edit"></i> Edit Info');
@@ -365,8 +358,53 @@ $(document).ready(function() {
                 $( "#tax_type" ).prop( "disabled", isEdit );
                 $( "#date_registered" ).prop( "disabled", isEdit );
                 $( "#cperson" ).prop( "disabled", isEdit );
+                // console.log(isEdit, $( "#clientname" ).val() );
+                var cid = $( "#cid" ).val();
+                var cname = $( "#clientname" ).val();
+                var branch = $( "#branch" ).val();
+                var busadd = $( "#busadd" ).val();
+                var businessID = $( "#businessID" ).val();
+                var contactno = $( "#contactno" ).val();
+                var email  = $( "#email" ).val();
+                var tin = $( "#tin" ).val();
+                var rdo = $( "#rdo" ).val();
+                var tax_class  = $( "#tax_class" ).val();
+                var tax_type = $( "#tax_type" ).val();
+                var date_r = $( "#date_registered" ).val();
+                var cperson = $( "#cperson" ).val();
 
-
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                type: 'POST',
+                url: '/clients/update',
+                data: {
+                    '_token': $('input[name=_token]').val(),
+                    'cid' : cid,
+                    'cname' : cname,
+                    'branch' : branch,
+                    'busadd' : busadd,
+                    'businessID' : businessID,
+                    'contactno' : contactno,
+                    'email' : email,
+                    'tin' : tin,
+                    'rdo' : rdo,
+                    'tax_class' : tax_class,
+                    'tax_type' : tax_type,
+                    'date_r' : date_r,
+                    'cperson' : cperson
+                },
+                success: function(data){
+                    console.log("Data saved." , data);
+                },
+                error:function(data)
+                {
+                    console.log(data);
+                }
+                });
 
                 isEdit = false;
 
@@ -384,14 +422,42 @@ $(document).ready(function() {
                 $( "#tax_type" ).prop( "disabled", isEdit );
                 $( "#date_registered" ).prop( "disabled", isEdit );
                 $( "#cperson" ).prop( "disabled", isEdit );
+                // console.log(isEdit, $( "#branch" ).val() );
                 isEdit = true;
+
             }
         }); 
 
-
-
-
 });
+Dropzone.options.dropzone =
+{
+    maxFilesize: 30,
+    renameFile: function (file) {
+        //var dt = new Date();
+        //var time = dt.getTime();
+        //return time + file.name;
+        return file.name;
+    },
+    acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf,.doc,.docx",
+    addRemoveLinks: true,
+    timeout: 60000,
+    success: function (file, response) {
+        console.log(response);
+    },
+    error: function (file, response) {
+        return false;
+    },
+    maxFiles: 1,
+    accept: function(file, done) {
+        console.log(file.name);
+        done();
+    },
+    init: function() {
+        this.on("maxfilesexceeded", function(file){
+            alert("No more files please! Only one (1) file is allowed.");
+        });
+    }
+};
 
 </script>
 

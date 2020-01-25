@@ -65,7 +65,7 @@
                                 <tr>
                                     <td>{{$c->id}}</td>
                                     <td>{{$c->clientname}}</td>
-                                    <td>Engr</td>
+                                    <td></td>
                                 </tr>
                                 @endforeach
                                 @endif
@@ -204,8 +204,8 @@ function format ( d ) {
         var branch = '';
         for(var i = 0; i < datab.length; i++){
           branch += '<tr><td>'+datab[i].clientname+'</td><td>'+datab[i].busadd+'</td><td>'+datab[i].tin+
-          '</td><td>'+datab[i].clientname+'</td><td>'+datab[i].clientname+'</td><td>'+datab[i].clientname+'</td><td>'+datab[i].clientname+
-          '</td><td>'+datab[i].cperson+'</td><td>'+datab[i].contactno+'</td><td><a href="{{url("client")}}/'+datab[i].id+'" target="_blank">View Files</a></td></tr>';
+          '</td><td>'+datab[i].businessID+'</td><td>'+datab[i].RDO+'</td><td>'+datab[i].tax_class+'</td><td>'+datab[i].tax_type+
+          '</td><td>'+datab[i].cperson+'</td><td>'+datab[i].contactno+'</td><td><a href="{{url("client")}}/'+datab[i].id+'" target="_blank">Details</a></td></tr>';
         }
 
         $("#nav-details-"+d.id).append(
@@ -218,13 +218,13 @@ function format ( d ) {
               '<td>'+datax[0].clientname+'</td>'+
               '<td>'+datax[0].busadd+'</td>'+
               '<td>'+datax[0].tin+'</td>'+
-              '<td></td>'+
-              '<td></td>'+
-              '<td></td>'+
-              '<td></td>'+
+              '<td>'+datax[0].businessID+'</td>'+
+              '<td>'+datax[0].RDO+'</td>'+
+              '<td>'+datax[0].tax_class+'</td>'+
+              '<td>'+datax[0].tax_type+'</td>'+
               '<td>'+datax[0].cperson+'</td>'+
               '<td>'+datax[0].contactno+'</td>'+
-              '<td><a href="{{url("client")}}/'+datax[0].id+'" target="_blank">View Files</a></td>'+
+              '<td><a href="{{url("client")}}/'+datax[0].id+'" target="_blank">Details</a></td>'+
           '</tr>'+
           branch +
           '</tbody>'+
@@ -242,8 +242,8 @@ function format ( d ) {
           '<tr>'+
           '<nav><div class="nav nav-tabs" id="nav-tab" role="tablist">'+
               '<a class="nav-item nav-link active" id="nav-details-tab" data-toggle="tab" href="#nav-details-'+d.id+'" role="tab" aria-controls="nav-details" aria-selected="true">Details</a>'+
-              '<a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile-'+d.id+'" role="tab" aria-controls="nav-profile" aria-selected="false">Files</a>'+
-              '<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact-'+d.id+'" role="tab" aria-controls="nav-contact" aria-selected="false">Brrr</a>'+
+              '<a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile-'+d.id+'" role="tab" aria-controls="nav-profile" aria-selected="false">Tab 2</a>'+
+              '<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact-'+d.id+'" role="tab" aria-controls="nav-contact" aria-selected="false">Tab 3</a>'+
           '</div></nav>'+
           '<div class="tab-content" id="nav-tabContent">'+
               '<div class="tab-pane fade show active" id="nav-details-'+d.id+'" role="tabpanel" aria-labelledby="nav-details-tab"></div>'+

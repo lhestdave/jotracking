@@ -54,7 +54,7 @@
             <div class="form-row">
               <div class="col-md-12 mb-3 form-row">
                 <label for="clientid">Choose Company/Client</label>
-                <select class="form-control" name="clientid" id="clientid" >
+                <select class="form-control custom-select" name="clientid" id="clientid" >
                   <!-- <option selected>Choose...</option> -->
 
                   @if(count($clients)>0)
@@ -77,7 +77,7 @@
               </div>
               <div class="form-group col-md-6">
                 <label for="assignedto">Assigned to</label>
-                <select id="assignedto" name="assignedto" class="form-control" required>
+                <select id="assignedto" name="assignedto" class="form-control custom-select" required>
                   <!-- <option selected>Choose....</option> -->
                   @if(count($users)>0)
                     @foreach($users as $user)
@@ -146,9 +146,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
 <script src "https://cdn.datatables.net/plug-ins/1.10.15/sorting/stringMonthYear.js"></script>
+<script src="{{url('../../assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
+<script src="{{url('../../assets/libs/select2/dist/js/select2.min.js')}}"></script>
 
 <script type="text/javascript">
+
    jQuery(document).ready(function() {
+
      $("#createddate").hide();
      $("#dateoverride").click(function () {
        if ($(this).is(":checked")) {
