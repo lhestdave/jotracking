@@ -57,6 +57,10 @@ Route::get('/clients', 'ClientController@index');
 Route::post('/addnewclient', 'ClientController@store');
 Route::post('/clients/search', 'ClientController@search');
 
+Route::get('/clientsprofiling', 'ClientController@getClientList');
+Route::post('/client/getdetail', 'ClientController@getClientDetail');
+Route::get('/client/{cid}', 'ClientController@getClient');
+
 Route::get('/billing', 'BillingController@index');
 Route::post('/billing/addpayment', 'BillingController@addpayment');
 Route::get('/billing/jid/{joid}', 'BillingController@getJOHistory');
@@ -89,3 +93,52 @@ Route::post('/createchat', 'MessageController@createChat');
 Route::get('/messenger', 'MessageController@index');
 Route::get('/message/{id}', 'MessageController@getMessage')->name('message');
 Route::post('message', 'MessageController@sendMessage');
+
+Route::get('laravel-send-email', 'EmailController@sendEMail');
+
+Route::get('test', function() {
+  Storage::disk('google')->put('test.txt', 'Hello World');
+});
+
+Route::get('filelist', 'GoogleDriveController@getFileList');
+
+Route::get('get', function() {
+  $filename = 'test.txt';
+  $dir = '/';
+  $recursive = false; // Get subdirectories also?
+  $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+  $file = $contents
+      ->where('type', '=', 'file')
+      ->where('filename', '=', pathinfo($filename, PATHINFO_FILENAME))
+      ->where('extension', '=', pathinfo($filename, PATHINFO_EXTENSION))
+      ->first(); // there can be duplicate file names!
+  //return $file; // array with file info
+  $rawData = Storage::cloud()->get($file['path']);
+  dd($rawData);
+  // return response($rawData, 200)
+  //     ->header('ContentType', $file['mimetype'])
+  //     ->header('Content-Disposition', "attachment; filename=$filename");
+});
+
+Route::get('put', function() {
+  Storage::cloud()->put('11GqugnN5_UXTFSZQ4rUlxh25aJH1kqFT/test.txt', 'Hello World');
+  return 'File was saved to Google Drive';
+});
+
+Route::get('create-dir', function() {
+  Storage::cloud()->makeDirectory('000');
+  return 'Directory was created in Google Drive';
+});
+
+Route::get('list', function() {
+  $dir = '/';
+  $recursive = false; // Get subdirectories also?
+  $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+
+  return $contents->where('type', '=', 'dir'); // directories
+  return $contents->where('type', '=', 'file'); // files
+});
+
+
+Route::get('multifileupload', 'HomeController@multifileupload')->name('multifileupload');
+Route::post('multifileupload', 'HomeController@store')->name('multifileupload');

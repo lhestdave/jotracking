@@ -15,9 +15,9 @@
             background: #a7a7a7;
         }
 
-        /* Handle on hover */
+        /* Handle on hover 929292 */
         ::-webkit-scrollbar-thumb:hover {
-            background: #929292;
+            background: #fff;
         }
 
         ul {
@@ -45,7 +45,7 @@
         }
 
         .user:hover {
-            background: #eeeeee;
+            background: #fff;
         }
 
         .user:last-child {
@@ -120,7 +120,7 @@
         }
 
         .active {
-            background: #eeeeee;
+            background: #fff;
         }
 
         input[type=text] {
@@ -152,7 +152,7 @@
                             <nav aria-label="breadcrumb">
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="{{url('home')}}">Home</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Messenger</li>
+                                        <li class="breadcrumb-item" aria-current="page">Messenger</li>
                                     </ol>
                                 </nav>
 

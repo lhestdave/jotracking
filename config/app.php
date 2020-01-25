@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Singapore',
 
     /*
     |--------------------------------------------------------------------------
@@ -177,6 +177,7 @@ return [
       //  UxWeb\SweetAlert\SweetAlertServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
+        App\Providers\GoogleDriveServiceProvider::class,
 
     ],
 

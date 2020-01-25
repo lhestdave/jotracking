@@ -10,6 +10,8 @@ require('@fortawesome/fontawesome-free');
 require('./jo');
 require('jquery');
 
+import 'select2';
+
 window.Vue = require('vue');
 
 /**

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Role;
 use App\User;
-
+use App\Message;
 use App\Client;
 use App\Joborder;
 use App\Task;
@@ -38,15 +38,17 @@ class HomeController extends Controller
       $clientcount = Client::count();
       $jocount = Joborder::count();
       $taskcount = Task::count();
+      //where(['from' => $user_id, 'to' => $my_id])->update(['is_read' => 1]);
+      $newmsgcount = Message::where(['is_read' => 0 ,'to' => Auth::id()])->count();
 
      // if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
         $jonotes = DB::table('vwjoupdates')->orderBy('datecreated', 'DESC')->paginate(20);
       // }else{
       //   $jonotes = DB::table('vwjoupdates')->where('assigned',Auth::user()->id)->orderBy('datecreated', 'DESC')->paginate(20);
       // }
-      
+      //dd($newmsgcount);
 
-      return view('home')->with(['clientcount' => $clientcount, 'jocount' => $jocount, 'taskcount' => $taskcount, 'jonotes'=>$jonotes]);
+      return view('home')->with(['clientcount' => $clientcount, 'jocount' => $jocount, 'newmsgcount' => $newmsgcount, 'jonotes'=>$jonotes]);
     }
     public function getTasks(Request $request)
     {
@@ -103,5 +105,24 @@ class HomeController extends Controller
   
       return view('profile');
     }
+    public function multifileupload()
+    {
+        return view('dropzonejs');
+    }
+    // public function store(Request $request)
+    // {
+    	
+    // 	$image = $request->file('file');
+    //     $imageName = time().$image->getClientOriginalName();
+    //     $upload_success = $image->move(public_path('images'),$imageName);
+        
+    //     if ($upload_success) {
+    //         return response()->json($upload_success, 200);
+    //     }
+    //     // Else, return error 400
+    //     else {
+    //         return response()->json('error', 400);
+    //     }
+    // }
 }
 //https://www.tutsmake.com/laravel-5-8-new-email-verification/?fbclid=IwAR2DMTYNdPoWnZDec_grgL-M2MJkOcLWKkWn45p-inro3O0AZI2aCuxinWk

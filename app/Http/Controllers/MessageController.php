@@ -96,7 +96,7 @@ class MessageController extends Controller
         $data->from = $from;
         $data->to = $to;
         $data->joid = $joid;
-        $data->message = $message;
+        $data->message = $message." [RE: J0#".$joid."]";
         $data->is_read = 0; // message will be unread when sending message
         $data->save();
 

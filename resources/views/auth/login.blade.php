@@ -47,6 +47,16 @@
                     <div class="text-center p-t-20 p-b-20">
                         <span class="db"><img src="{{url('../../assets/images/logo.png')}}" alt="logo" /></span>
                     </div>
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
                     <!-- Form -->
                     <form class="form-horizontal m-t-20" id="loginform" method="POST" action="{{ route('login') }}">
                     @csrf
@@ -88,6 +98,11 @@
                         @csrf
                             @if (session('status'))
                                 <div class="alert alert-success" role="alert">
+                                    {{ session('status') }}
+                                </div>
+                            @endif
+                            @if (session('error'))
+                                <div class="alert alert-danger" role="alert">
                                     {{ session('status') }}
                                 </div>
                             @endif

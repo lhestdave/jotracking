@@ -8,7 +8,7 @@
 <div class="page-breadcrumb">
         <div class="row">
             <div class="col-12 d-flex no-block align-items-center">
-                <h4 class="page-title">Manage JOs</h4>
+                <h4 class="page-title">Manage JOs</h4> &nbsp &nbsp <a href="{{url('/jo/create?cid=')}}"> Create New</a>
 
                 <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
@@ -48,13 +48,24 @@
 
                 <thead>
                     <tr>
+                        <th scope="col" width="2%"></th>
+                        <th scope="col" width="25%"></th>
+                        <th scope="col" width="15%"></th>
+                        <th scope="col" width="10%"></th>
+                        <th scope="col" width="38%"></th>
+                        <th scope="col" width="5%"></th>
+                        <th scope="col" width="5%"></th>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr id="jofilter">
                         <th scope="col" width="2%">JO#</th>
                         <th scope="col" width="25%">Company/Client Name</th>
                         <th scope="col" width="15%">Due Date</th>
                         <th scope="col" width="10%">Assigned to</th>
-                        <th scope="col" width="38%">Remarks/Notes</th>
+                        <th scope="col" width="38%">Description</th>
                         <th scope="col" width="5%">Action</th>
-                        <th scope="col" width="5%">View Task</th>
+                        <th scope="col" width="5%">View Updates</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,7 +79,7 @@
                            <td data-table-header="clients">{{$jo->clientname}}
                            </td>
                            @if($jo->datedue == date("Y-m-d") && $perx < 100)
-                           <td class="bg-white">{{$jo->datedue}}                            <?php if($perx == 100){ ?>
+                           <td class="bg-white">                           <?php if($perx == 100){ ?>
                         <div class="progress" style="height: 10px; margin-bottom:0px">
                         <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="{{$perx}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$perx}}%">{{$perx}}%</div>                             
                         </div>
@@ -76,9 +87,9 @@
                         <div class="progress" style="height: 10px; margin-bottom:0px">
                         <div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" aria-valuenow="{{$perx}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$perx}}%">{{$perx}}%</div>
                         </div>
-                        <?php } ?></td>
+                        <?php } ?>{{$jo->datedue}} </td>
                            @elseif($jo->datedue < date("Y-m-d") && $perx < 100)
-                           <td class="bg-danger">{{$jo->datedue}}                           <?php if($perx == 100){ ?>
+                           <td class="bg-danger"><?php if($perx == 100){ ?>
                         <div class="progress" style="height: 10px; margin-bottom:0px">
                         <div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" aria-valuenow="{{$perx}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$perx}}%">{{$perx}}%</div>                             
                         </div>
@@ -86,19 +97,19 @@
                         <div class="progress" style="height: 10px; margin-bottom:0px">
                         <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="{{$perx}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$perx}}%">{{$perx}}%</div>
                         </div>
-                        <?php } ?></td>
+                        <?php } ?>{{$jo->datedue}}</td>
                            @elseif($jo->datedue < date("Y-m-d") && $perx == 100)
-                           <td class="bg-success">{{$jo->datedue}}                           <?php if($perx == 100){ ?>
+                           <td class="bg-success">                          <?php if($perx == 100){ ?>
                         <div class="progress" style="height: 10px; margin-bottom:0px">
                         <div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" aria-valuenow="{{$perx}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$perx}}%">{{$perx}}%</div>                             
-                        </div>
+                        </div> 
                         <?php }else{ ?>
                         <div class="progress" style="height: 10px; margin-bottom:0px">
                         <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="{{$perx}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$perx}}%">{{$perx}}%</div>
                         </div>
-                        <?php } ?></td>
+                        <?php } ?>{{$jo->datedue}}</td>
                            @else
-                           <td class="bg-warning">{{$jo->datedue}}                            <?php if($perx == 100){ ?>
+                           <td class="bg-warning">                          <?php if($perx == 100){ ?>
                         <div class="progress" style="height: 10px; margin-bottom:0px">
                         <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" aria-valuenow="{{$perx}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$perx}}%">{{$perx}}%</div>                             
                         </div>
@@ -106,12 +117,12 @@
                         <div class="progress" style="height: 10px; margin-bottom:0px">
                         <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="{{$perx}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$perx}}%">{{$perx}}%</div>
                         </div>
-                        <?php } ?></td>
+                        <?php } ?>{{$jo->datedue}}</td>
                            @endif
 
                            <td>{{$jo->username}}</td>
                            <td><?php
-                            echo nl2br($jo->jonotes);
+                            echo nl2br($jo->tasks);
                             ?></td>
                            <td>
                            <p>
@@ -121,11 +132,11 @@
                                <i class="fas fa-address-book" aria-hidden="true"></i> Transfer
                              </button>
                              @endif
-                             <button class="btn btn-primary btn-xs mt-2" type="button" rel="tooltip" title="Add Notes/Updates"  data-toggle="modal" id="addNotes" data-target="#addNoteJO" onClick="saveNotes({{$jo->id}})" >
+                             <!-- <button class="btn btn-primary btn-xs mt-2" type="button" rel="tooltip" title="Add Notes/Updates"  data-toggle="modal" id="addNotes" data-target="#addNoteJO" onClick="saveNotes({{$jo->id}})" >
                              <i class="far fa-newspaper" aria-hidden="true"></i> Add Notes
-                             </button>
+                             </button> -->
 
-                             <button class="btn btn-primary btn-xs mt-2" type="button" rel="tooltip" title="Chat"  data-toggle="modal" id="chat" data-target="#createConvo" onClick="createConvo( {{$jo->assignedto}}, '{{$jo->username}}' , {{$jo->id}} , '{{$jo->clientname}}' )" >
+                             <button class="btn btn-primary btn-xs mt-2" type="button" rel="tooltip" title="Chat with {{$jo->username}}"  data-toggle="modal" id="chat" data-target="#createConvo" onClick="createConvo( {{$jo->assignedto}}, '{{$jo->username}}' , {{$jo->id}} , '{{$jo->clientname}}' )" >
                              <i class="mdi mdi-message" aria-hidden="true"></i> Chat
                              </button>
                            </p>
@@ -354,11 +365,13 @@
     <script src="{{url('../../assets/extra-libs/multicheck/jquery.multicheck.js')}}"></script>
     <script src="{{url('../../assets/extra-libs/DataTables/datatables.min.js')}}"></script>
     <script>
+    
       function search(ele) {
           if(event.key === 'Enter') {
-            $("textarea#tasknotes").val(ele.value + "<br>");
+            $("textarea#tasknotes").val(ele.value ); //+ "<br>");
+
             $("textarea#txtnotes").val(ele.value + "<br>");
-              //alert(ele.value);        
+            //alert(ele.value);        
           }
       }
         /****************************************
@@ -372,7 +385,42 @@
         // });
         var jid = 0;
 
-        var table = $('#jotable').DataTable( {}, {
+        var table = $('#jotable').DataTable( {
+
+          initComplete: function () {
+            var i = 0;
+            this.api().columns().every( function () {
+                var column = this;
+                //console.log(i);
+                if(i === 1 || i ===3){
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo( $(column.header()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+                
+                if(i === 2){
+                  column.data().unique().sort().each( function ( d, j ) {
+                      select.append( "<option value=\""+html_encode(d.split('%')[0])+"\">"+ d +"</option>" )
+                  } );
+                  
+                }else{
+                  column.data().unique().sort().each( function ( d, j ) {
+                      select.append( '<option value="'+d+'">'+ d.substring(0,20) +'</option>' )
+                  } );
+                }
+
+                }
+                i++;
+            } );
+          }
+        }, {
                 "ajax": "../ajax/data/objects.txt",
                 "columns": [
                     {
@@ -387,7 +435,7 @@
 
         /* Formatting function for row details - modify as you need */
         function format ( d ) {
-            var thd = '<thead><tr><th></th><th>Task Description</th><th>Lead Time</th><th>Status</th><th>Action</th></tr></thead>';
+            var thd = '<thead><tr><th></th><th>Task Description</th><th>Status</th><th>Action</th></tr></thead>';
                 var tb = '<tbody id="tbody'+jid+'"></tbody>';
                     return '<table cellpadding="5" cellspacing="0" border="1px" style="padding-right:100px;padding-left:100px;width:100%">'+
                                 thd +
@@ -434,12 +482,12 @@
                 
                 for (var i = 0; i < data.length; i++) {
                     if(data[i].tsid == 7){
-                    markup += '<tr class="trtask"><td >'+(i+1)+'</td><td>'+data[i].taskname+'</td><td >'+data[i].leadtime+'</td><td>['+data[i].name+']:'+data[i].state+'<br>'+data[i].st+'</td><td>'+
+                    markup += '<tr class="trtask"><td >'+(i+1)+'</td><td>'+data[i].taskname+'</td><td>['+data[i].name+']:'+data[i].state+'<br>'+data[i].st+'</td><td>'+
                     '<button class="btn btn-outline-primary my-2 my-sm-0 btn-sm taskstatus" data-toggle="modal" data-target="#updateTaskModal" type="button" onclick="gettaskStatus('+data[i].tid+','+data[i].tsid+',\''+data[i].taskname+'\',\'' + data[i].state +'\')" rel="tooltip" title="Update Status" disabled><span class="fa fa-edit"></span></button> '+
                     ''+
                     '</td></tr>';
                     }else{
-                    markup += '<tr class="trtask"><td >'+(i+1)+'</td><td>'+data[i].taskname+'</td><td >'+data[i].leadtime+'</td><td>['+data[i].name+']:'+data[i].state+'<br>'+data[i].st+'</td><td>'+
+                    markup += '<tr class="trtask"><td >'+(i+1)+'</td><td>'+data[i].taskname+'</td><td>['+data[i].name+']:'+data[i].state+'<br>'+data[i].st+'</td><td>'+
                     '<button class="btn btn-outline-primary my-2 my-sm-0 btn-sm taskstatus" data-toggle="modal" data-target="#updateTaskModal" type="button" onclick="gettaskStatus('+data[i].tid+','+data[i].tsid+',\''+data[i].taskname+'\',\'' + data[i].state +'\')" rel="tooltip" title="Update Status" ><span class="fa fa-edit"></span></button> '+
                     ''+
                     '</td></tr>';
@@ -649,6 +697,7 @@ function saveTaskNotes(){
   var tid = document.getElementById('taskid').value;
   var sid = document.getElementById('ctaskstatus').value;
   var tnote = document.getElementById('tasknotes').value;
+  tnote = tnote.replace(/\r?\n/g, '<br>');
   document.getElementById("tasknotes").value = '';
   var d = Date(Date.now('01-25-2009'));
   var table = document.getElementById("tasknotestable");

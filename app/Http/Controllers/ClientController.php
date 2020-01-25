@@ -67,11 +67,6 @@ class ClientController extends Controller
         return redirect('/clients')->with('success', $request->input("clientname").' has been updated.');
       }
   }
-  public function getClients()
-  {
-    $clients = Client::all();
-    return redirect('/clients')->with('clients',$clients);
-  }
   public function search(Request $request)
   {
     $admin = [];
@@ -81,5 +76,34 @@ class ClientController extends Controller
     $clients = Client::where('clientname', 'like', "%$request->csearchkey%")->paginate(20);
     // dd($clients);
     return view('client.index')->with(['clients'=> $clients ,'admin'=>$admin]);
+  }
+  public function getClientList(Request $request)
+  {
+    $admin = [];
+    if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
+      $admin['admin'] = 'admin';
+    }
+    $clients = DB::select("SELECT clients.* FROM clients WHERE clients.id=clients.parentID"); //Client::where(['id' => 'parentID3'])->get();
+    // $requestJSON = $clients[0];
+    // $requestJSON->lester = 205454;
+     //dd($clients);
+    return view('client.list')->with(['clients'=> $clients ,'admin'=>$admin]);
+    //  return view('client.index');
+  }
+  public function getClientDetail(Request $request)
+  {
+    $data = DB::table('clients')->where('id',$request->id)->get();
+    $branch =  DB::select("SELECT clients.* FROM clients WHERE $request->id = clients.parentID and clients.id != clients.parentID");
+    $responseJson = [];
+    $responseJson = ["clientID" => $request->id, "data" => $data, "branch" => $branch ];
+    return response()->json($responseJson);
+  }
+  public function getClient(Request $request)
+  {
+    $cid = $request->cid;
+
+    $clients = DB::table('vwclientdetails')->where(['id'=> $cid])->get();
+
+    return view('client.details')->with(['clients'=>$clients]);
   }
 }

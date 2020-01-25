@@ -116,6 +116,7 @@ class JOController extends Controller
         $jos = DB::table('vwjosdetails')->get(); //->paginate(15);
         $admin = [];
         $admin['admin'] = 'admin';
+        //dd($jos);
         return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin, 'jostate'=>$filter]);
       }else{
         $admin = [];
@@ -124,11 +125,13 @@ class JOController extends Controller
       }
     }
 
+    
+
   }
 
   public function getJOperUser(Request $request){
     // if(($request->user()->hasAnyRole('superadmin')) OR ($request->user()->hasAnyRole('admin'))){
-      $jos = DB::table('vwjosdetails')->where(['assignedto'=>$request->id])->paginate(15);
+      $jos = DB::table('vwjosdetails')->where(['assignedto'=>$request->id])->get();
       $admin = [];
       $admin['admin'] = 'admin';
       return view('jo.index')->with(['jos'=> $jos ,'admin'=>$admin]);
