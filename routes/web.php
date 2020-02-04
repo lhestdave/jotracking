@@ -115,7 +115,7 @@ Route::get('get', function() {
       ->first(); // there can be duplicate file names!
   //return $file; // array with file info
   $rawData = Storage::cloud()->get($file['path']);
-  dd($rawData);
+
   // return response($rawData, 200)
   //     ->header('ContentType', $file['mimetype'])
   //     ->header('Content-Disposition', "attachment; filename=$filename");
@@ -149,15 +149,16 @@ Route::post('dropzone/store','ImageController@store');
 
 Route::post('getformlist','ClientController@getFormList');
 
-Route::get('put-existing', function() {
-  $filenameloc = '\images\1579953487402ESP-ppt-16.pdf';
-  $filename = '1579953487402ESP-ppt-16.pdf';
-  $filePath = public_path($filenameloc);
-  $fileData = File::get($filePath);
+Route::get('put-existing', 'ImageController@putExisting');
+//function() {
+//   $filenameloc = '\files\book2.png';
+//   $filename = 'book2.png';
+//   $filePath = public_path($filenameloc);
+//   $fileData = File::get($filePath);
 
-  $data = Storage::cloud()->put($filename, $fileData);
-  return 'File was saved to Google Drive';
-});
+//   $data = Storage::cloud()->put($filename, $fileData);
+//   return 'File was saved to Google Drive';
+// });
 
 Route::get('get', function() {
   $filename = '1579953487402ESP-ppt-16.pdf';
@@ -189,3 +190,5 @@ Route::get('export/{basename}', function ($basename) {
 
     return response($export->getBody(), 200, $export->getHeaders());
 });
+
+Route::post('/client/upload','ImageController@fileUpload');

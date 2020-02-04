@@ -106,7 +106,7 @@
                               </div>
                           </div>
                           <div class="form-group row">
-                              <label for="lname" class="col-sm-3 text-right control-label col-form-label">Taxpayer Classification</label>
+                              <label for="lname" class="col-sm-3 text-right control-label col-form-label">Taxpayer Class.</label>
                               <div class="col-sm-9">
                                   <input type="text" class="form-control" id="tax_class" name="tax_class" value="{{$c->tax_class}}" disabled>
                               </div>
@@ -218,7 +218,7 @@
             <div class="form-group row">
                 <label class="col-md-3" for="disabledTextInput">Applicable Date</label>
                 <div class="col-md-9">
-                    <input type="date" id="applicableDate" class="form-control" placeholder="Applicable Date" >
+                    <input type="date" id="applicableDate" class="form-control" placeholder="Applicable Date" required>
                 </div>
             </div>
             <div class="form-group row">
@@ -229,6 +229,7 @@
                     </select>
                 </div>
             </div>
+            <input type="text" id="filename" name="filename">
             <div class="form-group row">
                 <label class="col-md-3">File Upload</label>
                 <div class="col-md-9">
@@ -241,7 +242,7 @@
         </div>
         <div class="border-top">
             <div class="card-body">
-                <center><button type="button" class="btn btn-primary">Save</button></center>
+                <center><button type="submit" class="btn btn-primary" id="fileuploadsubmit">Save</button></center>
             </div>
         </div>
     </div>
@@ -428,14 +429,44 @@ $(document).ready(function() {
             }
         }); 
 
+        $('#fileuploadsubmit').click(function() {
+            var appDate = $('#applicableDate').val();
+            var formType = $( "#formType option:selected" ).val();
+            var filename = $('#filename').val();
+            
+            $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+            type: 'POST',
+            url: '/clients/update',
+            data: {
+                '_token': $('input[name=_token]').val(),
+                'filename' : filename
+            },
+            success: function(data){
+                console.log("Data saved." , data);
+            },
+            error:function(data)
+            {
+                console.log(data);
+            }
+            });
+
+
+            alert(formType);
+        });
+
 });
 Dropzone.options.dropzone =
 {
     maxFilesize: 30,
     renameFile: function (file) {
-        //var dt = new Date();
-        //var time = dt.getTime();
-        //return time + file.name;
+        // var dt = new Date();
+        // var time = dt.getTime();
+        // return time + file.name;
         return file.name;
     },
     acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf,.doc,.docx",
@@ -445,10 +476,12 @@ Dropzone.options.dropzone =
         console.log(response);
     },
     error: function (file, response) {
+        $('#filename').val();
         return false;
     },
     maxFiles: 1,
     accept: function(file, done) {
+        $('#filename').val(file.name);
         console.log(file.name);
         done();
     },
