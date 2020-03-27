@@ -20,10 +20,12 @@
     <link href="{{url('../../assets/extra-libs/multicheck/multicheck.css')}}" rel="stylesheet">
     <link href="{{url('../../assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}" rel="stylesheet">
     <link href="{{url('../../assets/libs/datatables/media/css/jquery.dataTables.min.css')}}" rel="stylesheet">
-    <!-- Select2 -->
+    <!-- Select2 <link rel="stylesheet" type="text/css" href="../../assets/libs/select2/dist/css/select2.min.css"> --> 
     <link rel="stylesheet" type="text/css" href="{{url('../../assets/libs/select2/dist/css/select2.min.css')}}">
     <!-- Dropzone -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/min/dropzone.min.css">
+
+    <!-- <script src="http://malsup.github.com/jquery.form.js"></script> -->
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

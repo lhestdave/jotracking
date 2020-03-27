@@ -61,6 +61,7 @@ Route::post('/clients/update', 'ClientController@update');
 Route::get('/clientsprofiling', 'ClientController@getClientList');
 Route::post('/client/getdetail', 'ClientController@getClientDetail');
 Route::get('/client/{cid}', 'ClientController@getClient');
+Route::post('/client/upload', 'ClientController@upload')->name('upload');
 
 Route::get('/billing', 'BillingController@index');
 Route::post('/billing/addpayment', 'BillingController@addpayment');
@@ -191,4 +192,8 @@ Route::get('export/{basename}', function ($basename) {
     return response($export->getBody(), 200, $export->getHeaders());
 });
 
-Route::post('/client/upload','ImageController@fileUpload');
+// Route::post('/client/{cid}/upload','FileUploadController@upload')->name('upload');
+
+// //file upload 03272020
+// Route::get('file-upload', 'FileUploadController@index');
+// Route::post('file-upload/upload', 'FileUploadController@upload')->name('upload');

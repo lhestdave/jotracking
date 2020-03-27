@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 use App\Client;
 use App\Role;
@@ -104,7 +105,9 @@ class ClientController extends Controller
 
     $clients = DB::table('vwclientdetails')->where(['id'=> $cid])->get();
 
-    return view('client.details')->with(['clients'=>$clients]);
+    $files = DB::select("SELECT cf.id, cf.applicableDate, (SELECT f.code FROM forms as f WHERE f.id=cf.formID) as formCode,(SELECT f.description FROM forms as f WHERE f.id=cf.formID) as formDescription,(SELECT (SELECT a.code FROM agencies as a WHERE f.agencyID = a.id) as agencyCode FROM forms as f WHERE f.id=cf.formID) as agencies, cf.locationReference,cf.filetype FROM client_files as cf WHERE cf.clientID = $cid and cf.isDeleted=0 Order By cf.applicableDate DESC");
+
+    return view('client.details')->with(['clients'=>$clients, 'files'=>$files]);
   }
   public function update(Request $request)
   {
@@ -127,4 +130,64 @@ class ClientController extends Controller
     $data = DB::table('forms')->get();
     return response()->json($data);
   }
+
+  function upload(Request $request)
+  {
+    
+    $rules = array(
+      'file'  => 'required|max:1000000',
+      'applicableDate' => 'required|date',
+      'formTypeID' => 'required',
+      'cid' => 'required'
+     );
+
+     $error = Validator::make($request->all(), $rules);
+
+     if($error->fails())
+     {
+      return response()->json(['errors' => $error->errors()->all()]);
+     }
+
+     $image = $request->file('file');
+     $file_ext = "";
+     $new_name = Str::random(40) . '.' . strtolower($image->getClientOriginalExtension());
+     $image->move(public_path('files'), $new_name);
+
+     switch($image->getClientOriginalExtension()){
+        case 'pdf':
+          $file_ext = 'pdf.svg';
+          break;
+        case 'doc':
+        case 'docx':
+            $file_ext = 'doc.svg';
+            break;
+        case 'jpeg':
+        case 'jpg':
+        case 'gif':
+        case 'png':
+            $file_ext = 'image.svg';
+            break;
+        default:
+            $file_ext = 'file.svg';
+     }
+     $ins_upd = 'created_at';
+     $cur_datetime = date("Y-m-d").' '.date("H:i:s");
+     if($request->fileID){
+      $ins_upd = 'updated_at';
+     }
+     $dataID = DB::table('client_files')
+            ->insertGetId(
+            ['clientID' => $request->cid, 'applicableDate'=>$request->applicableDate, 'formID'=>$request->formTypeID, 'filetype'=>$file_ext, 'locationReference'=>$new_name, 'isDeleted'=>'0' , 'uploadedby'=>Auth::user()->id, $ins_upd=> $cur_datetime ]
+        );
+      $data = DB::table('client_files')->where(['id'=>$dataID])->get();
+      $output = array(
+          'success' => 'File uploaded successfully',
+          'image'  => '<img src="/icons/'.$file_ext.'" class="img-thumbnail" />',
+          'responseJSON' => $data
+          );
+
+      return response()->json($output);
+      //return response()->json($request);
+    }
+
 }

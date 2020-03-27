@@ -146,61 +146,118 @@
                 @endif
               </div>
             </div>
-            <div class="col-md-12">
+
+            <div class="col-md-12" id="formUpload">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Files &nbsp  <button type="button" class="btn btn-primary btn-sm" id="uploadFile" data-toggle="modal" data-target="#addFileModal" >
-                           <i class="fas fa-file-alt"></i>&nbsp Upload</button> </h5>
+                    <form method="post" action="{{ route('upload') }}" enctype="multipart/form-data" id="fileUploadForm">
+                      @csrf
+                        <div class="form-group row">
+                              <label for="lname" class="col-sm-3 text-right control-label col-form-label">Applicable Date</label>
+                              <div class="col-sm-9">
+                                  <input type="date" class="form-control" id="applicableDate" name="applicableDate" value="" >
+                              </div>
+                          </div>
+                          <div class="form-group row">
+                              <label for="cono1" class="col-sm-3 text-right control-label col-form-label">Form Type</label>
+                              <div class="col-md-9" id="select2options">
+                                        <select class="select2 form-control custom-select" id="formTypeID" name="formTypeID" style="width: 100%; height:36px;">
+                                            <option>Select</option>
+                                            <!-- <optgroup label="Alaskan/Hawaiian Time Zone">
+                                                <option value="AK">Alaska</option>
+                                                <option value="HI">Hawaii</option>
+                                            </optgroup>
+                                            <optgroup label="Pacific Time Zone">
+                                                <option value="CA">California</option>
+                                                <option value="NV">Nevada</option>
+                                                <option value="OR">Oregon</option>
+                                                <option value="WA">Washington</option>
+                                            </optgroup> -->
+                                        </select>
+                                    </div>
+                          </div>
+                          <div class="form-group row">
+                              <label for="cono1" class="col-sm-3 text-right control-label col-form-label">Select File</label>
+                              <div class="col-sm-9">
+                                  <input type="file" class="form-control" id="file" name="file" value="Upload" >
+                              </div>
+                          </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                            <center>
+                                <input type="button" name="upload" value="Upload" id="btnFileUpload" class="btn btn-success" />
+                            </center>
+                            </div>
+                        </div>
+
+                    </form>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" aria-valuenow=""
+                      aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                        0%
+                      </div>
+                    </div>
+                    <br />
+                    <div id="success">
+
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body"><h5 class="card-title">Files</h5>
+                        <!-- <h5 class="card-title">Files &nbsp  <button type="button" class="btn btn-primary btn-sm" id="uploadFile" data-toggle="modal" data-target="#addFileModal" >
+                           <i class="fas fa-file-alt"></i>&nbsp Upload</button> </h5> -->
                         <table id="zero_config" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
+                                    <th>ID</th>
+                                    <th>Form Code</th>
+                                    <th>Form Description</th>
+                                    <th>Agency</th>
+                                    <th>Applicable Date</th>
+                                    <th>File</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
+                               
+                                @if(count($files) > 0)
+                                    @foreach($files as $file)
+                                    <tr id="tr{{$file->id}}">
+                                        <td>{{$file->id}}</td>
+                                        <td>{{$file->formCode}}</td>
+                                        <td>{{$file->formDescription}}</td>
+                                        <td>{{$file->agencies}}</td>
+                                        <td>{{$file->applicableDate}}</td>
+                                        <td><center><a title="" aria-describedby="tooltip" href="{{url('/files')}}/{{$file->locationReference}}" target="_blank" 
+                                        data-toggle="tooltip" data-original-title="View" data-placement="top"><img src="/icons/{{$file->filetype}}" alt="Image" height="32" width="32"></a></center></td>
+                                        <td><center>
+                                            <a title="" aria-describedby="tooltip" href="#" data-toggle="tooltip" data-original-title="Share" data-placement="top">
+                                            <i class="mdi mdi-share-variant" height="32" width="32"></i>
+                                            </a>
+                                            <a title="" href="#" data-toggle="tooltip" data-original-title="Delete" data-placement="top">
+                                            <i class="mdi mdi-close" height="32" width="32"></i>
+                                            </a></center>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                @else
                                 <tr>
-                                    <td>Tiger Nixon</td>
-                                    <td>System Architect</td>
-                                    <td>Edinburgh</td>
-                                    <td>61</td>
-                                    <td>2011/04/25</td>
-                                    <td>$320,800</td>
+                                    <td colspan="7"><center>No Data Found.</center></td>
                                 </tr>
-                                <tr>
-                                    <td>Garrett Winters</td>
-                                    <td>Accountant</td>
-                                    <td>Tokyo</td>
-                                    <td>63</td>
-                                    <td>2011/07/25</td>
-                                    <td>$170,750</td>
-                                </tr>
-                                <tr>
-                                    <td>Ashton Cox</td>
-                                    <td>Junior Technical Author</td>
-                                    <td>San Francisco</td>
-                                    <td>66</td>
-                                    <td>2009/01/12</td>
-                                    <td>$86,000</td>
-                                </tr>
-                                <tr>
-                                    <td>Cedric Kelly</td>
-                                    <td>Senior Javascript Developer</td>
-                                    <td>Edinburgh</td>
-                                    <td>22</td>
-                                    <td>2012/03/29</td>
-                                    <td>$433,060</td>
-                                </tr>
+                                @endif
+
                             </tbody>
                         </table>
                         </div>
                     </div>
                     </div>
                 </div>
+
 
 <!-- Modal -->
 <div class="modal fade" id="addFileModal" tabindex="-1" role="dialog" aria-labelledby="newClientModalLabel" aria-hidden="true">
@@ -229,16 +286,7 @@
                     </select>
                 </div>
             </div>
-            <input type="text" id="filename" name="filename">
-            <div class="form-group row">
-                <label class="col-md-3">File Upload</label>
-                <div class="col-md-9">
-                <form method="post" action="{{url('dropzone/store')}}" enctype="multipart/form-data"
-                class="dropzone form-group" id="dropzone">
-                @csrf
-                </form>
-                </div>
-            </div>
+
         </div>
         <div class="border-top">
             <div class="card-body">
@@ -273,7 +321,7 @@
 <script src="{{url('../../assets/libs/jquery/dist/jquery.min.js')}}"></script>
 <!-- Bootstrap tether Core JavaScript -->
 <script src="{{url('../../assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
-<script src="../../assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="{{url('../../assets/libs/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 <!-- slimscrollbar scrollbar JavaScript -->
 <script src="{{url('../../assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js')}}"></script>
 <script src="{{url('../../assets/extra-libs/sparkline/sparkline.js')}}"></script>
@@ -287,49 +335,63 @@
 <script src="{{url('../../assets/extra-libs/multicheck/datatable-checkbox-init.js')}}"></script>
 <script src="{{url('../../assets/extra-libs/multicheck/jquery.multicheck.js')}}"></script>
 <script src="{{url('../../assets/extra-libs/DataTables/datatables.min.js')}}"></script>
+
+<!-- <script src="{{url('../../assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
+<script src="{{url('../../dist/js/pages/mask/mask.init.js')}}"></script> -->
 <script src="{{url('../../assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
 <script src="{{url('../../assets/libs/select2/dist/js/select2.min.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.0/dropzone.js"></script>
+<!-- <script src="{{url('../../assets/libs/jquery-asColor/dist/jquery-asColor.min.js')}}"></script>
+<script src="{{url('../../assets/libs/jquery-asGradient/dist/jquery-asGradient.js')}}"></script>
+<script src="{{url('../../assets/libs/jquery-asColorPicker/dist/jquery-asColorPicker.min.js')}}"></script>
+<script src="{{url('../../assets/libs/jquery-minicolors/jquery.minicolors.min.js')}}"></script>
+<script src="{{url('../../assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
+<script src="{{url('../../assets/libs/quill/dist/quill.min.js')}}"></script> -->
 
 
 <script>
 // console.log($( "#cid" ).val());
+// var isUpdate = false;
+// var areYouReallySure = false;
 
+$(".select2").select2();
 $(document).ready(function() {
-    var isFormLoaded = false;
 
-    if(isFormLoaded === false){
-        $("#uploadFile").click(function(){
-            $('#formType').find('option').remove();
-            $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-            type: 'POST',
-            url: '/getformlist',
-            data: {
-                '_token': $('input[name=_token]').val(),
-            },
-            success: function(data){
-                //console.log("Data." , data.length);
-                for(var i = 0; i < data.length; i++){
-                    $("#formType").append('<option value="'+data[i].id+'">'+data[i].code + ' '+ data[i].description +'</option>');
-                }
-                isFormLoaded = true;
-            },
-            error:function(data)
-            {
-                console.log(data);
-                isFormLoaded = false;
-            }
-            });
-        });
+    $(window).on('beforeunload',function(){
+      return '';
+    });
+    
+    $('#formTypeID').find('option').remove();
+    $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+    type: 'POST',
+    url: '/getformlist',
+    data: {
+        '_token': $('input[name=_token]').val(),
+    },
+    success: function(data){
+        //console.log("Data." , data.length);
+        for(var i = 0; i < data.length; i++){
+            $("#formTypeID").append('<option value="'+data[i].id+'">'+data[i].code + ' '+ data[i].description +'</option>');
+        }
+        //isFormLoaded = true;
+    },
+    error:function(data)
+    {
+        console.log(data);
+        //isFormLoaded = false;
     }
+    });
+
     //     //***********************************//
     // // For select 2
     // //***********************************//
+
+    
+
     // $(".select2").select2({
     //     placeholder: 'Select a Form Type'
     // });
@@ -459,39 +521,112 @@ $(document).ready(function() {
             alert(formType);
         });
 
-});
-Dropzone.options.dropzone =
-{
-    maxFilesize: 30,
-    renameFile: function (file) {
-        // var dt = new Date();
-        // var time = dt.getTime();
-        // return time + file.name;
-        return file.name;
-    },
-    acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf,.doc,.docx",
-    addRemoveLinks: true,
-    timeout: 60000,
-    success: function (file, response) {
-        console.log(response);
-    },
-    error: function (file, response) {
-        $('#filename').val();
-        return false;
-    },
-    maxFiles: 1,
-    accept: function(file, done) {
-        $('#filename').val(file.name);
-        console.log(file.name);
-        done();
-    },
-    init: function() {
-        this.on("maxfilesexceeded", function(file){
-            alert("No more files please! Only one (1) file is allowed.");
-        });
-    }
-};
+        $('#btnFileUpload').click(function (event) {
+            //stop submit the form, we will post it manually.
+            event.preventDefault();
 
+            // Get form
+            var form = $('#fileUploadForm')[0];
+
+            // Create an FormData object 
+            var data = new FormData(form);
+            data.append("cid", $("#cid").val());
+
+            $("#btnFileUpload").prop("disabled", true);
+
+            $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+            type: 'POST',
+            url: '/client/upload',
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            beforeSend:function(){
+                $('#success').empty();
+                $('.progress-bar').css('width', '0%');
+            },
+            uploadProgress:function(event, position, total, percentComplete)
+            {
+                $('.progress-bar').text(percentComplete + '%');
+                $('.progress-bar').css('width', percentComplete + '%');
+            },
+            success:function(data)
+            {   
+                console.log(data);
+                if(data.errors)
+                {
+                    $('.progress-bar').text('0%');
+                    $('.progress-bar').css('width', '0%');
+                    $('#success').html('<span class="text-danger"><b>'+data.errors+'</b></span>');
+                }
+                if(data.success)
+                {
+                    $('.progress-bar').text('Uploaded');
+                    $('.progress-bar').css('width', '100%');
+                    $('#success').html('<span class="text-success"><b>'+data.success+'</b></span><br /><br />');
+                    // $('#success').append(data.image);
+                    $('#fileUploadForm')[0].reset();
+                }
+                $("#btnFileUpload").prop("disabled", false);
+                //console.log(data);
+                //setTimeout(function(){ $('.progress-bar').css('width', '0%'); }, 3000);
+            }
+            });
+        });
+
+
+});
+// Dropzone.options.dropzone =
+// {
+//     maxFilesize: 30,
+//     renameFile: function (file) {
+//         // var dt = new Date();
+//         // var time = dt.getTime();
+//         // return time + file.name;
+//         return file.name;
+//     },
+//     acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf,.doc,.docx",
+//     addRemoveLinks: true,
+//     timeout: 60000,
+//     success: function (file, response) {
+//         console.log(response);
+//     },
+//     error: function (file, response) {
+//         $('#filename').val();
+//         return false;
+//     },
+//     maxFiles: 1,
+//     accept: function(file, done) {
+//         $('#filename').val(file.name);
+//         console.log(file.name);
+//         done();
+//     },
+//     init: function() {
+//         this.on("maxfilesexceeded", function(file){
+//             alert("No more files please! Only one (1) file is allowed.");
+//         });
+//     }
+// };
+    // function areYouSure() {
+    //     if(allowPrompt){
+    //         if (!areYouReallySure && true) {
+    //             areYouReallySure = true;
+    //             var confMessage = "";
+    //             return confMessage;
+    //         }
+    //     }else{
+    //         allowPrompt = true;
+    //     }
+    // }
+
+    // var allowPrompt = true;
+    // window.onbeforeunload = areYouSure;
 </script>
 
 @endsection
