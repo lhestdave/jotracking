@@ -327,7 +327,10 @@
         <li class="list-group-item" id="touser"></li><input type="text" name="touser" id="touser"  hidden/>
         <li class="list-group-item" id="joid"></li><input type="text" name="joid" id="joid" hidden/>
         <li class="list-group-item" id="clientname"></li>
-        <li class="list-group-item" >MESSAGE: <input type="text" class="col-sm-12" name="message" id="message" autofocus required/> </li>
+        <li class="list-group-item" >MESSAGE: <textarea class="col-sm-12" name="message" id="message" rows="4" cols="50" autofocus required></textarea>
+      
+      
+      </li>
       </ul>
 
       </div>
@@ -736,16 +739,19 @@ function saveTaskNotes(){
 
 }
 function createConvo(touser, user, joid, clientname){
-
+  var x = document.getElementById("message").autofocus;
   $("li#touser").text("TO: " + user.toString());
   $("input#touser").val(touser);
   $("li#joid").text("JO#: " + joid.toString());
   $("input#joid").val(joid);
   $("li#clientname").text("CLIENT: "+clientname);
 
+  $('#createConvo').on('shown.bs.modal', function() {
+    $(this).find('textarea[name="message"]').focus();
+  });
 
 }
 
-    </script>
+</script>
 
 @endsection

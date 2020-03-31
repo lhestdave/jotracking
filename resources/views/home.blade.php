@@ -75,8 +75,37 @@
                                     <h6 class="text-white"> Messages <span class="badge badge-light">{{$newmsgcount}}</span>  </h6>
                                 </div>
                             </div>
+                            </a>
                         </div>
-                        </a>
+                    
+                        <?php $str_mail = explode("@", Auth::user()->email); ?>
+                    <!-- Column -->
+                    <div class="col-md-6 col-lg-2 col-xlg-3">
+                    <!-- <a href="{{url('webmail')}}" > -->
+                    <a href="https://webmail1.hostinger.ph/?_task=login&_user={{$str_mail[0]}}@opamin.com" target="_blank">
+                        <div class="card card-hover">
+                            <div class="box bg-primary text-center">
+                                <h1 class="font-light text-white"><i class="mdi mdi-email"></i></h1>
+                                <h6 class="text-white">Opamin Webmail</h6>
+                            </div>
+                        </div>
+                    </a>
+                    </div>
+                    <!-- Column -->
+
+                    <!-- Column -->
+                    <div class="col-md-6 col-lg-2 col-xlg-3">
+                    <a href="https://{{$str_mail[1]}}" target="_blank">
+                        <div class="card card-hover">
+                            <div class="box bg-secondary text-center">
+                                <h1 class="font-light text-white"><i class="mdi mdi-email-variant"></i></h1>
+                                <h6 class="text-white">{{$str_mail[1]}}</h6>
+                            </div>
+                        </div>
+                    </a>
+                    </div>
+                    <!-- Column -->
+
                     </div>
 
                     <div class="row">

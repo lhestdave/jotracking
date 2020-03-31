@@ -135,7 +135,7 @@ class ClientController extends Controller
   {
     
     $rules = array(
-      'file'  => 'required|max:1000000',
+      'file'  => 'required|max:300000',
       'applicableDate' => 'required|date',
       'formTypeID' => 'required',
       'cid' => 'required'
@@ -188,6 +188,15 @@ class ClientController extends Controller
 
       return response()->json($output);
       //return response()->json($request);
+    }
+
+    function deleteFile(Request $request)
+    {
+      DB::table('client_files')
+            ->where('id', $request->fid)
+            ->update(['isDeleted' => 1]);
+
+      return response()->json(['success'=> 'Success']);
     }
 
 }

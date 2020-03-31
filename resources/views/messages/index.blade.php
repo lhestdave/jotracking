@@ -228,6 +228,9 @@
     var receiver_id = '';
     var my_id = "{{ Auth::id() }}";
     $(document).ready(function () {
+
+       
+
         // ajax setup form csrf token
         $.ajaxSetup({
             headers: {
@@ -316,6 +319,18 @@
 
             }
         });
+
+
+         // simulate click
+         let searchParams = new URLSearchParams(window.location.search);
+        if(searchParams.has('code') === true ){
+            var empCode = searchParams.get('code');
+            //alert(empCode);
+            if(empCode !== null){
+                console.log($("li#"+empCode+".user").click());
+                //alert("not null");
+            }
+        }
     });
 
     // make a function to scroll down auto

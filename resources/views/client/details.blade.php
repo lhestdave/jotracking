@@ -239,7 +239,7 @@
                                             <a title="" aria-describedby="tooltip" href="#" data-toggle="tooltip" data-original-title="Share" data-placement="top">
                                             <i class="mdi mdi-share-variant" height="32" width="32"></i>
                                             </a>
-                                            <a title="" href="#" data-toggle="tooltip" data-original-title="Delete" data-placement="top">
+                                            <a title="" href="javascript:void(0)" data-toggle="tooltip" data-id="{{$file->id}}" data-original-title="Delete" data-placement="top" >
                                             <i class="mdi mdi-close" height="32" width="32"></i>
                                             </a></center>
                                         </td>
@@ -558,7 +558,7 @@ $(document).ready(function() {
             },
             success:function(data)
             {   
-                console.log(data);
+                //console.log(data);
                 if(data.errors)
                 {
                     $('.progress-bar').text('0%');
@@ -572,61 +572,66 @@ $(document).ready(function() {
                     $('#success').html('<span class="text-success"><b>'+data.success+'</b></span><br /><br />');
                     // $('#success').append(data.image);
                     $('#fileUploadForm')[0].reset();
+
+                    $('#zero_config table tbody').append('<tr><td>....</td><td>....</td><td>....</td><td>....</td><td>....</td><td>....</td><td>....</td></tr>');
                 }
                 $("#btnFileUpload").prop("disabled", false);
                 //console.log(data);
                 //setTimeout(function(){ $('.progress-bar').css('width', '0%'); }, 3000);
+            },
+            error:function(data)
+            {
+                //console.log(data);
+                var msg = data.status === 413 ? 'Error: File too large.':'';
+                $('.progress-bar').text('0%');
+                $('.progress-bar').css('width', '0%');
+                $('#success').html('<span class="text-danger"><b>'+msg+'</b></span>');
+                $("#btnFileUpload").prop("disabled", false);
             }
             });
         });
 
 
-});
-// Dropzone.options.dropzone =
-// {
-//     maxFilesize: 30,
-//     renameFile: function (file) {
-//         // var dt = new Date();
-//         // var time = dt.getTime();
-//         // return time + file.name;
-//         return file.name;
-//     },
-//     acceptedFiles: ".jpeg,.jpg,.png,.gif,.pdf,.doc,.docx",
-//     addRemoveLinks: true,
-//     timeout: 60000,
-//     success: function (file, response) {
-//         console.log(response);
-//     },
-//     error: function (file, response) {
-//         $('#filename').val();
-//         return false;
-//     },
-//     maxFiles: 1,
-//     accept: function(file, done) {
-//         $('#filename').val(file.name);
-//         console.log(file.name);
-//         done();
-//     },
-//     init: function() {
-//         this.on("maxfilesexceeded", function(file){
-//             alert("No more files please! Only one (1) file is allowed.");
-//         });
-//     }
-// };
-    // function areYouSure() {
-    //     if(allowPrompt){
-    //         if (!areYouReallySure && true) {
-    //             areYouReallySure = true;
-    //             var confMessage = "";
-    //             return confMessage;
-    //         }
-    //     }else{
-    //         allowPrompt = true;
-    //     }
-    // }
+        var table = $('#zero_config').DataTable();
+ 
+        $('#zero_config tbody').on( 'click', 'i.mdi.mdi-close', function () {
 
-    // var allowPrompt = true;
-    // window.onbeforeunload = areYouSure;
+
+            var fid =  $(this).parents('tr').find('td').first().text();
+            var isDelete = confirm('Are you sure that you want to DELETE the file?'+fid);
+
+            if(isDelete === true){
+                table.row( $(this).parents('tr') ).remove().draw();
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                type: 'POST',
+                url: '/clients/file/delete',
+                data: {
+                    '_token': $('input[name=_token]').val(),
+                    'fid' : fid
+                },
+                success:function(data)
+                {   
+                    console.log('Item '+fid+' has been deleted.', data);
+                },
+                error:function(data)
+                {
+                    alert('Error in deleting.');
+                }
+                });
+            }else{
+                alert('No changes made on the file.');
+            }
+        
+        } );
+
+
+});
+
 </script>
 
 @endsection

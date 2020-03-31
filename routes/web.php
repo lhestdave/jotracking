@@ -45,6 +45,7 @@ Route::post('/jo/gettasknotes', 'JOController@getTaskNotes');
 Route::get('/jo/create', 'JOController@create');
 Route::post('/addjo', 'JOController@addjo');
 Route::get('/jo/view/{cid}', 'JOController@viewjo');
+Route::get('/jo/details/{cid}', 'JOController@viewjoone'); //update
 Route::get('/jo/viewer/{userid}/{joid}', 'JOController@viewjoone');
 Route::post('/jo/search', 'JOController@search');
 Route::post('/jo/getusers', 'JOController@getUsers');
@@ -57,6 +58,7 @@ Route::get('/clients', 'ClientController@index');
 Route::post('/addnewclient', 'ClientController@store');
 Route::post('/clients/search', 'ClientController@search');
 Route::post('/clients/update', 'ClientController@update');
+Route::post('/clients/file/delete', 'ClientController@deleteFile');
 
 Route::get('/clientsprofiling', 'ClientController@getClientList');
 Route::post('/client/getdetail', 'ClientController@getClientDetail');
@@ -68,6 +70,8 @@ Route::post('/billing/addpayment', 'BillingController@addpayment');
 Route::get('/billing/jid/{joid}', 'BillingController@getJOHistory');
 Route::get('/billing/view/{cid}', 'BillingController@viewbilling');
 Route::post('/billing/search', 'BillingController@search');
+
+Route::get('webmail','HomeController@openWebmail');
 
 Route::get('generate-pdf','PDFController@generatePDF');
 

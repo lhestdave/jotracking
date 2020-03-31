@@ -95,8 +95,8 @@ class MessageController extends Controller
         $data = new Message();
         $data->from = $from;
         $data->to = $to;
-        $data->joid = $joid;
-        $data->message = $message." [RE: J0#".$joid."]";
+        $data->joid = $joid; ///jo/viewer/{userid}/{joid}'
+        $data->message = $message."<br><br>[RE: J0#".$joid."]"."<br><a href='/jo/viewer/".Auth::id()."/".$joid. "' >Go to JO Details</a>";
         $data->is_read = 0; // message will be unread when sending message
         $data->save();
 
@@ -121,7 +121,7 @@ class MessageController extends Controller
         where users.id != " . Auth::id() . "
         group by users.id, users.name, users.avatar, users.email");
 
-        return view('messages.index', ['users' => $users]);
+        return redirect('/messenger?code='.$to)->with(['users' => $users]);
 
 
     }

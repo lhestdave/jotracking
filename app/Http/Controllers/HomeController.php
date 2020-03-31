@@ -124,5 +124,11 @@ class HomeController extends Controller
     //         return response()->json('error', 400);
     //     }
     // }
+
+    public function openWebmail()
+    {
+      return view('emails.index');
+    }
 }
 //https://www.tutsmake.com/laravel-5-8-new-email-verification/?fbclid=IwAR2DMTYNdPoWnZDec_grgL-M2MJkOcLWKkWn45p-inro3O0AZI2aCuxinWk
+
